@@ -64,13 +64,15 @@ def getD(P_Q, E): # This generates the value of D for decryption.
     
 def main():
     answer = input("Press E for Encryption or D for Decryption: ")
+    P = int(input("Enter Private Key P: "))
+    Q = int(input("Enter Private Key Q: "))
+    E = int(input("Enter Public Key E: "))
+    PQ = P * Q
+    ValidMultiples = []  # Declaration of Empty Lists for Valid Multiples of 2
+    Multiples = []  # Declaration of Empty Lists for Multiples of 2 which may contain invalid multiples too
+
     if (answer == "E" or answer == "e"): # This is code for encryption......
         message = input("Enter Message: ")
-        P = int(input("Enter Private Key P: "))
-        Q = int(input("Enter Private Key Q: "))
-        E = int(input("Enter Public Key E: "))
-        ValidMultiples = [] # Declaration of Empty Lists for Valid Multiples of 2
-        Multiples = [] # Declaration of Empty Lists for Multiples of 2 which may contain invalid multiples too
         PQ = P*Q
         splitIntoMultiplesOf2(E, Multiples)
         splitIntoValidMultiplesOf2(E, ValidMultiples)
@@ -94,13 +96,7 @@ def main():
             print(EncryptedChar, end = "")
     
     elif (answer == "D" or answer == "d"): # This is code for decryption.....
-        P = int(input("Enter Private Key P: "))
-        Q = int(input("Enter Private Key Q: "))
-        E = int(input("Enter Public Key E: "))
-        PQ = P*Q
         D = getD((P-1)*(Q-1), E)
-        Multiples = []
-        ValidMultiples = []
         splitIntoMultiplesOf2(D, Multiples)
         splitIntoValidMultiplesOf2(D, ValidMultiples)
         createValidList(Multiples, ValidMultiples) 
@@ -121,10 +117,5 @@ def main():
             product = getProduct(Multiples)
             EncryptedSymbol = getValue(product%PQ)
             print(EncryptedSymbol, end = "")
-            
 
 main()
-
-
-        
-                       
