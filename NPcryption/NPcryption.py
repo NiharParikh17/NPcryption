@@ -1,10 +1,8 @@
-def getAscii(Char, answer):
-    asciiSymbols = [" ", "!", "\"", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ":", ";", "<", "=", ">", "?", "@", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "[", "\\", "]", "^", "_", "`", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "{", "|", "}", "~"] 
-    asciiValue = [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74 , 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126]
-    if (answer == "E" or answer == "e"):
-        return int(asciiValue[asciiSymbols.index(Char)])
-    elif (answer == "D" or answer == "d"):
-          return asciiSymbols[asciiValue.index(Char)]
+def getAscii(character):
+    return ord(character)
+
+def getValue(ascii):
+    return chr(ascii);
           
 def splitIntoValidMultiplesOf2(E, List): # This splits public key (E) into multiples of 2.
     LeftE = E
@@ -77,7 +75,7 @@ def main():
         splitIntoMultiplesOf2(E, Multiples)
         splitIntoValidMultiplesOf2(E, ValidMultiples)
         for character in range (0, len(message)):
-            ascii = getAscii(message[character], "E")
+            ascii = getAscii(message[character])
             k = 0
             setPrevSQR(ascii, k, Multiples)
             modNum = ascii%PQ
@@ -121,7 +119,7 @@ def main():
                 modNum = prevSQR%PQ
                 setModNum(modNum, k, Multiples)
             product = getProduct(Multiples)
-            EncryptedSymbol = getAscii(product%PQ, "D")
+            EncryptedSymbol = getValue(product%PQ)
             print(EncryptedSymbol, end = "")
             
 
