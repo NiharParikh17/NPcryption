@@ -124,6 +124,6 @@ def main():
 
     elif answer == "D" or answer == "d":
         message = input("Encypted Message: ")
-        decryption(P, Q, E, message)
+        decrypt(P, Q, E, message)
 
 main()
