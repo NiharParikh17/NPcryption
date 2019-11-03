@@ -63,6 +63,7 @@ def getD(P_Q, E):
         return D
 
 def encrypt(P, Q, E, message):
+    encrypted_message = ""
     PQ = P*Q
     ValidMultiples = []
     Multiples = []
@@ -82,12 +83,14 @@ def encrypt(P, Q, E, message):
             setModNum(modNum, k, Multiples)
         createValidList(Multiples, ValidMultiples)
         product = getProduct(Multiples)
-        EncryptedChar = product % PQ
+        EncryptedChar = str(product % PQ)
         while len(str(EncryptedChar)) != len(str(PQ)):
-            EncryptedChar = "0" + str(EncryptedChar)
-        print(EncryptedChar, end="")
+            EncryptedChar = "0" + EncryptedChar
+        encrypted_message = encrypted_message + EncryptedChar
+    return encrypted_message
 
 def decrypt(P, Q, E, message):
+    plain_message = ""
     PQ = P*Q
     ValidMultiples = []
     Multiples = []
@@ -110,7 +113,8 @@ def decrypt(P, Q, E, message):
             setModNum(modNum, k, Multiples)
         product = getProduct(Multiples)
         EncryptedSymbol = getCharacter(product % PQ)
-        print(EncryptedSymbol, end="")
+        plain_message = plain_message + EncryptedSymbol
+    return plain_message
 
 def main():
     answer = input("Press E for Encryption or D for Decryption: ")
@@ -120,10 +124,10 @@ def main():
 
     if answer == "E" or answer == "e":
         message = input("Enter Message: ")
-        encrypt(P, Q, E, message)
+        print(encrypt(P, Q, E, message))
 
     elif answer == "D" or answer == "d":
         message = input("Encrypted Message: ")
-        decrypt(P, Q, E, message)
+        print(decrypt(P, Q, E, message))
 
 main()
