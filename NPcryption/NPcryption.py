@@ -61,61 +61,69 @@ def getD(P_Q, E): # This generates the value of D for decryption.
         return D
     else:
         return D
-    
+
+def encrypt(P, Q, E, message):
+    PQ = P*Q
+    ValidMultiples = []
+    Multiples = []
+    splitIntoMultiplesOf2(E, Multiples)
+    splitIntoValidMultiplesOf2(E, ValidMultiples)
+    for character in range(0, len(message)):
+        ascii = getAscii(message[character])
+        k = 0
+        setPrevSQR(ascii, k, Multiples)
+        modNum = ascii % PQ
+        setModNum(modNum, k, Multiples)
+        for multiple in range(0, len(Multiples) - 1):
+            k = k + 1
+            prevSQR = modNum * modNum
+            setPrevSQR(prevSQR, k, Multiples)
+            modNum = prevSQR % PQ
+            setModNum(modNum, k, Multiples)
+        createValidList(Multiples, ValidMultiples)
+        product = getProduct(Multiples)
+        EncryptedChar = product % PQ
+        while (len(str(EncryptedChar)) != len(str(PQ))):
+            EncryptedChar = "0" + str(EncryptedChar)
+        print(EncryptedChar, end="")
+
+def decryption(P, Q, E, message):
+    PQ = P*Q
+    ValidMultiples = []
+    Multiples = []
+    D = getD((P - 1) * (Q - 1), E)
+    splitIntoMultiplesOf2(D, Multiples)
+    splitIntoValidMultiplesOf2(D, ValidMultiples)
+    createValidList(Multiples, ValidMultiples)
+    CharLength = len(str(PQ))
+    for eachCharCoded in range(0, len(message), CharLength):
+        codedChar = int(message[eachCharCoded:eachCharCoded + CharLength])
+        k = 0
+        setPrevSQR(codedChar, k, Multiples)
+        modNum = codedChar % PQ
+        setModNum(modNum, k, Multiples)
+        for mult in range(0, len(Multiples) - 1):
+            k = k + 1
+            prevSQR = modNum * modNum
+            setPrevSQR(prevSQR, k, Multiples)
+            modNum = prevSQR % PQ
+            setModNum(modNum, k, Multiples)
+        product = getProduct(Multiples)
+        EncryptedSymbol = getValue(product % PQ)
+        print(EncryptedSymbol, end="")
+
 def main():
     answer = input("Press E for Encryption or D for Decryption: ")
     P = int(input("Enter Private Key P: "))
     Q = int(input("Enter Private Key Q: "))
     E = int(input("Enter Public Key E: "))
-    PQ = P * Q
-    ValidMultiples = []  # Declaration of Empty Lists for Valid Multiples of 2
-    Multiples = []  # Declaration of Empty Lists for Multiples of 2 which may contain invalid multiples too
 
-    if (answer == "E" or answer == "e"): # This is code for encryption......
+    if answer == "E" or answer == "e":
         message = input("Enter Message: ")
-        PQ = P*Q
-        splitIntoMultiplesOf2(E, Multiples)
-        splitIntoValidMultiplesOf2(E, ValidMultiples)
-        for character in range (0, len(message)):
-            ascii = getAscii(message[character])
-            k = 0
-            setPrevSQR(ascii, k, Multiples)
-            modNum = ascii%PQ
-            setModNum(modNum, k, Multiples)
-            for multiple in range (0, len(Multiples)-1):
-                k = k+1
-                prevSQR = modNum*modNum
-                setPrevSQR(prevSQR, k, Multiples)
-                modNum = prevSQR%PQ
-                setModNum(modNum, k, Multiples)
-            createValidList(Multiples, ValidMultiples)
-            product = getProduct(Multiples)
-            EncryptedChar = product%PQ
-            while(len(str(EncryptedChar)) != len(str(PQ))):
-                EncryptedChar = "0"+str(EncryptedChar)
-            print(EncryptedChar, end = "")
-    
-    elif (answer == "D" or answer == "d"): # This is code for decryption.....
-        D = getD((P-1)*(Q-1), E)
-        splitIntoMultiplesOf2(D, Multiples)
-        splitIntoValidMultiplesOf2(D, ValidMultiples)
-        createValidList(Multiples, ValidMultiples) 
+        encrypt(P, Q, E, message)
+
+    elif answer == "D" or answer == "d":
         message = input("Encypted Message: ")
-        CharLength = len(str(PQ))
-        for eachCharCoded in range(0, len(message), CharLength):
-            codedChar = int(message[eachCharCoded:eachCharCoded+CharLength])
-            k = 0
-            setPrevSQR(codedChar, k, Multiples)
-            modNum = codedChar%PQ
-            setModNum(modNum, k, Multiples)
-            for mult in range(0, len(Multiples)-1):
-                k = k+1
-                prevSQR = modNum*modNum
-                setPrevSQR(prevSQR, k, Multiples)
-                modNum = prevSQR%PQ
-                setModNum(modNum, k, Multiples)
-            product = getProduct(Multiples)
-            EncryptedSymbol = getValue(product%PQ)
-            print(EncryptedSymbol, end = "")
+        decryption(P, Q, E, message)
 
 main()
