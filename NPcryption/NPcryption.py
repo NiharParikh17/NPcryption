@@ -1,8 +1,10 @@
 def getAscii(character):
     return ord(character)
 
+
 def getCharacter(ascii):
     return chr(ascii)
+
 
 def splitIntoValidMultiplesOf2(E, List):
     LeftE = E
@@ -11,60 +13,67 @@ def splitIntoValidMultiplesOf2(E, List):
         E = LeftE
         while int(E) != 1:
             two = two * 2
-            E = E//2
+            E = E // 2
         LeftE = LeftE - two
         List.append(int(two))
     List.sort()
 
+
 def splitIntoMultiplesOf2(E, List):
-        two = 1
-        while int(E) != 1:
-            two = two*2
-            E = E//2
-        while int(two) != 0:
-            List.append([int(two), 0, 0, "N"])
-            two = two//2
-        List.sort()
+    two = 1
+    while int(E) != 1:
+        two = two * 2
+        E = E // 2
+    while int(two) != 0:
+        List.append([int(two), 0, 0, "N"])
+        two = two // 2
+    List.sort()
+
 
 def setPrevSQR(prevSQR, K, List):
     List[K][1] = prevSQR
 
+
 def setModNum(modNum, K, List):
     List[K][2] = modNum
+
 
 def createValidList(List, List2):
     for x in range(0, len(List)):
         if List[x][0] in List2:
             List[x][3] = "Y"
 
+
 def getProduct(List):
     product = 1
-    for values in range (0, len(List)):
+    for values in range(0, len(List)):
         if List[values][3] == "Y":
-            product = product*List[values][2]
+            product = product * List[values][2]
     return product
 
+
 def getD(P_Q, E):
-    ListOfD = [[P_Q, 1, 0, 0],[E, 0, 1, 0]]
+    ListOfD = [[P_Q, 1, 0, 0], [E, 0, 1, 0]]
     nextR = P_Q % E
     rows = 1
     while nextR != 1 and nextR != 0:
         rows = rows + 1
-        nextR = ListOfD[rows-2][0]%ListOfD[rows-1][0]
-        nextQ = ListOfD[rows-2][0]//ListOfD[rows-1][0]
-        nextX = ListOfD[rows-2][1]-(ListOfD[rows-1][1]*nextQ)
-        nextD = ListOfD[rows-2][2]-(ListOfD[rows-1][2]*nextQ)
+        nextR = ListOfD[rows - 2][0] % ListOfD[rows - 1][0]
+        nextQ = ListOfD[rows - 2][0] // ListOfD[rows - 1][0]
+        nextX = ListOfD[rows - 2][1] - (ListOfD[rows - 1][1] * nextQ)
+        nextD = ListOfD[rows - 2][2] - (ListOfD[rows - 1][2] * nextQ)
         ListOfD.append([nextR, nextX, nextD, nextQ])
-    D = (ListOfD[len(ListOfD)-1][2])
+    D = (ListOfD[len(ListOfD) - 1][2])
     if D < 0:
         D = D + P_Q
         return D
     else:
         return D
 
+
 def encrypt(P, Q, E, message):
     encrypted_message = ""
-    PQ = P*Q
+    PQ = P * Q
     ValidMultiples = []
     Multiples = []
     splitIntoMultiplesOf2(E, Multiples)
@@ -89,9 +98,10 @@ def encrypt(P, Q, E, message):
         encrypted_message = encrypted_message + EncryptedChar
     return encrypted_message
 
+
 def decrypt(P, Q, E, message):
     plain_message = ""
-    PQ = P*Q
+    PQ = P * Q
     ValidMultiples = []
     Multiples = []
     D = getD((P - 1) * (Q - 1), E)
@@ -116,6 +126,7 @@ def decrypt(P, Q, E, message):
         plain_message = plain_message + EncryptedSymbol
     return plain_message
 
+
 def main():
     answer = input("Press E for Encryption or D for Decryption: ")
     P = int(input("Enter Private Key P: "))
@@ -129,5 +140,6 @@ def main():
     elif answer == "D" or answer == "d":
         message = input("Encrypted Message: ")
         print(decrypt(P, Q, E, message))
+
 
 main()
