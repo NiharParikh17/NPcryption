@@ -87,7 +87,7 @@ def encrypt(P, Q, E, message):
             EncryptedChar = "0" + str(EncryptedChar)
         print(EncryptedChar, end="")
 
-def decryption(P, Q, E, message):
+def decrypt(P, Q, E, message):
     PQ = P*Q
     ValidMultiples = []
     Multiples = []
