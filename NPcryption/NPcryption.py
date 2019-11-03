@@ -4,7 +4,7 @@ def getAscii(character):
 def getValue(ascii):
     return chr(ascii)
 
-def splitIntoValidMultiplesOf2(E, List): # This splits public key (E) into multiples of 2.
+def splitIntoValidMultiplesOf2(E, List):
     LeftE = E
     while int(LeftE) != 0:
         two = 1
@@ -16,7 +16,7 @@ def splitIntoValidMultiplesOf2(E, List): # This splits public key (E) into multi
         List.append(int(two))
     List.sort()
 
-def splitIntoMultiplesOf2(E, List): # This creates multiples of 2 with max value of E and minimum 1.
+def splitIntoMultiplesOf2(E, List):
         two = 1
         while int(E) != 1:
             two = two*2
@@ -44,8 +44,8 @@ def getProduct(List):
             product = product*List[values][2]
     return product
 
-def getD(P_Q, E): # This generates the value of D for decryption.
-    ListOfD = [[P_Q, 1, 0, 0],[E, 0, 1, 0]] # Declaration of a list for finding D with formula (P-1)(Q-1)x + ED = 1 where first two entries are fixed
+def getD(P_Q, E):
+    ListOfD = [[P_Q, 1, 0, 0],[E, 0, 1, 0]]
     nextR = P_Q % E
     rows = 1
     while nextR != 1 and nextR != 0:
