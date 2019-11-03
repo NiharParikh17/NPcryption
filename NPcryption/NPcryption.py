@@ -1,7 +1,7 @@
 def getAscii(character):
     return ord(character)
 
-def getValue(ascii):
+def getCharacter(ascii):
     return chr(ascii)
 
 def splitIntoValidMultiplesOf2(E, List):
@@ -109,7 +109,7 @@ def decrypt(P, Q, E, message):
             modNum = prevSQR % PQ
             setModNum(modNum, k, Multiples)
         product = getProduct(Multiples)
-        EncryptedSymbol = getValue(product % PQ)
+        EncryptedSymbol = getCharacter(product % PQ)
         print(EncryptedSymbol, end="")
 
 def main():
