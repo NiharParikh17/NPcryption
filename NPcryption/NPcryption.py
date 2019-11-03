@@ -123,7 +123,7 @@ def main():
         encrypt(P, Q, E, message)
 
     elif answer == "D" or answer == "d":
-        message = input("Encypted Message: ")
+        message = input("Encrypted Message: ")
         decrypt(P, Q, E, message)
 
 main()
