@@ -8,23 +8,26 @@ def getCharacter(ascii):
     return chr(ascii)
 
 
-def splitIntoValidMultiplesOf2(E, List):
+def splitIntoValidMultiplesOf2(E):
+    validMultiples = []
     i = 1
     while i <= E:
         if i & E:
-            List.append(i)
+            validMultiples.append(i)
         i <<= 1
-    return List
+    return validMultiples
 
 def getHighestPowerOf2(n): 
     return 2 ** int(math.log(n, 2))
 
-def splitIntoMultiplesOf2(E, List):
+def splitIntoMultiplesOf2(E):
+    multiples = []
     two = getHighestPowerOf2(E)
     while int(two) != 0:
-        List.append([int(two), 0, 0, "N"])
+        multiples.append([int(two), 0, 0, "N"])
         two = two // 2
-    List.sort()
+    multiples.sort()
+    return multiples
 
 
 def setPrevSQR(prevSQR, K, List):
@@ -71,10 +74,8 @@ def getD(P_Q, E):
 def encrypt(P, Q, E, message):
     encrypted_message = ""
     PQ = P * Q
-    ValidMultiples = []
-    Multiples = []
-    splitIntoMultiplesOf2(E, Multiples)
-    splitIntoValidMultiplesOf2(E, ValidMultiples)
+    Multiples = splitIntoMultiplesOf2(E)
+    ValidMultiples = splitIntoValidMultiplesOf2(E)
     for character in range(0, len(message)):
         ascii = getAscii(message[character])
         k = 0
@@ -99,11 +100,9 @@ def encrypt(P, Q, E, message):
 def decrypt(P, Q, E, message):
     plain_message = ""
     PQ = P * Q
-    ValidMultiples = []
-    Multiples = []
     D = getD((P - 1) * (Q - 1), E)
-    splitIntoMultiplesOf2(D, Multiples)
-    splitIntoValidMultiplesOf2(D, ValidMultiples)
+    Multiples = splitIntoMultiplesOf2(D)
+    ValidMultiples = splitIntoValidMultiplesOf2(D)
     createValidList(Multiples, ValidMultiples)
     CharLength = len(str(PQ))
     for eachCharCoded in range(0, len(message), CharLength):
