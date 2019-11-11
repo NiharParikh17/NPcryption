@@ -1,3 +1,5 @@
+import math
+
 def getAscii(character):
     return ord(character)
 
@@ -14,11 +16,11 @@ def splitIntoValidMultiplesOf2(E, List):
         i <<= 1
     return List
 
+def getHighestPowerOf2(n): 
+    return 2 ** int(math.log(n, 2))
+
 def splitIntoMultiplesOf2(E, List):
-    two = 1
-    while int(E) != 1:
-        two = two * 2
-        E = E // 2
+    two = getHighestPowerOf2(E)
     while int(two) != 0:
         List.append([int(two), 0, 0, "N"])
         two = two // 2
