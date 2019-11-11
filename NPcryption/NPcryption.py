@@ -7,17 +7,12 @@ def getCharacter(ascii):
 
 
 def splitIntoValidMultiplesOf2(E, List):
-    LeftE = E
-    while int(LeftE) != 0:
-        two = 1
-        E = LeftE
-        while int(E) != 1:
-            two = two * 2
-            E = E // 2
-        LeftE = LeftE - two
-        List.append(int(two))
-    List.sort()
-
+    i = 1
+    while i <= E:
+        if i & E:
+            List.append(i)
+        i <<= 1
+    return List
 
 def splitIntoMultiplesOf2(E, List):
     two = 1
