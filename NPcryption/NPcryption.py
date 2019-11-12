@@ -120,22 +120,25 @@ def decrypt(P, Q, E, message):
         if codedChar in decryptDict:
             EncryptedSymbol = decryptDict[codedChar]
         else:
-            k = 0
-            setPrevSQR(codedChar, k, Multiples)
-            modNum = codedChar % PQ
-            setModNum(modNum, k, Multiples)
-            for mult in range(0, len(Multiples) - 1):
-                k = k + 1
-                prevSQR = modNum * modNum
-                setPrevSQR(prevSQR, k, Multiples)
-                modNum = prevSQR % PQ
-                setModNum(modNum, k, Multiples)
-            product = getProduct(Multiples)
-            EncryptedSymbol = getCharacter(product % PQ)
+            EncryptedSymbol = decryptCharacter(PQ, codedChar, Multiples)
             decryptDict[codedChar] = EncryptedSymbol
         plain_message = plain_message + EncryptedSymbol
     return plain_message
 
+def decryptCharacter(PQ, codedChar, Multiples):
+    k = 0
+    setPrevSQR(codedChar, k, Multiples)
+    modNum = codedChar % PQ
+    setModNum(modNum, k, Multiples)
+    for mult in range(0, len(Multiples) - 1):
+        k = k + 1
+        prevSQR = modNum * modNum
+        setPrevSQR(prevSQR, k, Multiples)
+        modNum = prevSQR % PQ
+        setModNum(modNum, k, Multiples)
+    product = getProduct(Multiples)
+    EncryptedSymbol = getCharacter(product % PQ)
+    return EncryptedSymbol
 
 def main():
     answer = input("Press E for Encryption or D for Decryption: ")
