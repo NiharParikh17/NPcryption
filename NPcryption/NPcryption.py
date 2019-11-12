@@ -103,6 +103,7 @@ def encrypt(P, Q, E, message):
 
 
 def decrypt(P, Q, E, message):
+    decryptDict = {}
     plain_message = ""
     PQ = P * Q
     D = getD((P - 1) * (Q - 1), E)
@@ -112,18 +113,22 @@ def decrypt(P, Q, E, message):
     CharLength = len(str(PQ))
     for eachCharCoded in range(0, len(message), CharLength):
         codedChar = int(message[eachCharCoded:eachCharCoded + CharLength])
-        k = 0
-        setPrevSQR(codedChar, k, Multiples)
-        modNum = codedChar % PQ
-        setModNum(modNum, k, Multiples)
-        for mult in range(0, len(Multiples) - 1):
-            k = k + 1
-            prevSQR = modNum * modNum
-            setPrevSQR(prevSQR, k, Multiples)
-            modNum = prevSQR % PQ
+        if codedChar in decryptDict:
+            EncryptedSymbol = decryptDict[codedChar]
+        else:
+            k = 0
+            setPrevSQR(codedChar, k, Multiples)
+            modNum = codedChar % PQ
             setModNum(modNum, k, Multiples)
-        product = getProduct(Multiples)
-        EncryptedSymbol = getCharacter(product % PQ)
+            for mult in range(0, len(Multiples) - 1):
+                k = k + 1
+                prevSQR = modNum * modNum
+                setPrevSQR(prevSQR, k, Multiples)
+                modNum = prevSQR % PQ
+                setModNum(modNum, k, Multiples)
+            product = getProduct(Multiples)
+            EncryptedSymbol = getCharacter(product % PQ)
+            decryptDict[codedChar] = EncryptedSymbol
         plain_message = plain_message + EncryptedSymbol
     return plain_message
 
