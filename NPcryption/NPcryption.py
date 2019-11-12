@@ -3,10 +3,8 @@ import math
 def getAscii(character):
     return ord(character)
 
-
 def getCharacter(ascii):
     return chr(ascii)
-
 
 def splitIntoValidPowersOf2(E):
     validMultiples = []
@@ -29,20 +27,16 @@ def splitIntoPowersOf2(E):
     multiples.sort()
     return multiples
 
-
 def setPrevSQR(prevSQR, K, List):
     List[K][1] = prevSQR
 
-
 def setModNum(modNum, K, List):
     List[K][2] = modNum
-
 
 def createValidList(List, List2):
     for x in range(0, len(List)):
         if List[x][0] in List2:
             List[x][3] = "Y"
-
 
 def getProduct(List):
     product = 1
@@ -50,7 +44,6 @@ def getProduct(List):
         if List[values][3] == "Y":
             product = product * List[values][2]
     return product
-
 
 def getD(P_Q, E):
     ListOfD = [[P_Q, 1, 0, 0], [E, 0, 1, 0]]
@@ -69,7 +62,6 @@ def getD(P_Q, E):
         return D
     else:
         return D
-
 
 def encrypt(P, Q, E, message):
     encyptedDict = {}
@@ -104,7 +96,6 @@ def encryptCharacter(PQ, character, Multiples):
     while len(str(EncryptedChar)) != len(str(PQ)):
         EncryptedChar = "0" + EncryptedChar
     return EncryptedChar
-
 
 def decrypt(P, Q, E, message):
     decryptDict = {}
@@ -153,6 +144,5 @@ def main():
     elif answer == "D" or answer == "d":
         message = input("Encrypted Message: ")
         print(decrypt(P, Q, E, message))
-
 
 main()
