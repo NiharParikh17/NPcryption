@@ -76,8 +76,8 @@ def encrypt(P, Q, E, message):
     PQ = P * Q
     Multiples = splitIntoMultiplesOf2(E)
     ValidMultiples = splitIntoValidMultiplesOf2(E)
-    for character in range(0, len(message)):
-        ascii = getAscii(message[character])
+    for character in message:
+        ascii = getAscii(character)
         k = 0
         setPrevSQR(ascii, k, Multiples)
         modNum = ascii % PQ
