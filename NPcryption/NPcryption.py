@@ -72,27 +72,32 @@ def getD(P_Q, E):
 
 
 def encrypt(P, Q, E, message):
+    encyptedDict = {}
     encrypted_message = ""
     PQ = P * Q
     Multiples = splitIntoPowersOf2(E)
     ValidMultiples = splitIntoValidPowersOf2(E)
     for character in message:
-        ascii = getAscii(character)
-        k = 0
-        setPrevSQR(ascii, k, Multiples)
-        modNum = ascii % PQ
-        setModNum(modNum, k, Multiples)
-        for multiple in range(0, len(Multiples) - 1):
-            k = k + 1
-            prevSQR = modNum * modNum
-            setPrevSQR(prevSQR, k, Multiples)
-            modNum = prevSQR % PQ
+        if character in encyptedDict:
+            EncryptedChar = encyptedDict[character]
+        else:
+            ascii = getAscii(character)
+            k = 0
+            setPrevSQR(ascii, k, Multiples)
+            modNum = ascii % PQ
             setModNum(modNum, k, Multiples)
-        createValidList(Multiples, ValidMultiples)
-        product = getProduct(Multiples)
-        EncryptedChar = str(product % PQ)
-        while len(str(EncryptedChar)) != len(str(PQ)):
-            EncryptedChar = "0" + EncryptedChar
+            for multiple in range(0, len(Multiples) - 1):
+                k = k + 1
+                prevSQR = modNum * modNum
+                setPrevSQR(prevSQR, k, Multiples)
+                modNum = prevSQR % PQ
+                setModNum(modNum, k, Multiples)
+            createValidList(Multiples, ValidMultiples)
+            product = getProduct(Multiples)
+            EncryptedChar = str(product % PQ)
+            while len(str(EncryptedChar)) != len(str(PQ)):
+                EncryptedChar = "0" + EncryptedChar
+        encyptedDict[character] = EncryptedChar
         encrypted_message = encrypted_message + EncryptedChar
     return encrypted_message
 
