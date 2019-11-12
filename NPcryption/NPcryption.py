@@ -97,7 +97,7 @@ def encrypt(P, Q, E, message):
             EncryptedChar = str(product % PQ)
             while len(str(EncryptedChar)) != len(str(PQ)):
                 EncryptedChar = "0" + EncryptedChar
-        encyptedDict[character] = EncryptedChar
+            encyptedDict[character] = EncryptedChar
         encrypted_message = encrypted_message + EncryptedChar
     return encrypted_message
 
