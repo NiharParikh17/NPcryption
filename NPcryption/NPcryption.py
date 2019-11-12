@@ -111,16 +111,16 @@ def decrypt(P, Q, E, message):
     plain_message = ""
     PQ = P * Q
     D = getD((P - 1) * (Q - 1), E)
-    Multiples = splitIntoPowersOf2(D)
-    ValidMultiples = splitIntoValidPowersOf2(D)
-    createValidList(Multiples, ValidMultiples)
+    multiples = splitIntoPowersOf2(D)
+    validMultiples = splitIntoValidPowersOf2(D)
+    createValidList(multiples, validMultiples)
     CharLength = len(str(PQ))
     for eachCharCoded in range(0, len(message), CharLength):
         codedChar = int(message[eachCharCoded:eachCharCoded + CharLength])
         if codedChar in decryptDict:
             EncryptedSymbol = decryptDict[codedChar]
         else:
-            EncryptedSymbol = decryptCharacter(PQ, codedChar, Multiples)
+            EncryptedSymbol = decryptCharacter(PQ, codedChar, multiples)
             decryptDict[codedChar] = EncryptedSymbol
         plain_message = plain_message + EncryptedSymbol
     return plain_message
