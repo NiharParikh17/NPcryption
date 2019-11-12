@@ -18,9 +18,9 @@ def splitIntoValidPowersOf2(n):
 def getHighestPowerOf2(n):
     return 2 ** int(math.log(n, 2))
 
-def splitIntoPowersOf2(E):
+def splitIntoPowersOf2(n):
     multiples = []
-    two = getHighestPowerOf2(E)
+    two = getHighestPowerOf2(n)
     while int(two) != 0:
         multiples.append([int(two), 0, 0, "N"])
         two = two // 2
