@@ -8,7 +8,7 @@ def getCharacter(ascii):
     return chr(ascii)
 
 
-def splitIntoValidMultiplesOf2(E):
+def splitIntoValidPowersOf2(E):
     validMultiples = []
     i = 1
     while i <= E:
@@ -17,10 +17,10 @@ def splitIntoValidMultiplesOf2(E):
         i <<= 1
     return validMultiples
 
-def getHighestPowerOf2(n): 
+def getHighestPowerOf2(n):
     return 2 ** int(math.log(n, 2))
 
-def splitIntoMultiplesOf2(E):
+def splitIntoPowersOf2(E):
     multiples = []
     two = getHighestPowerOf2(E)
     while int(two) != 0:
@@ -74,8 +74,8 @@ def getD(P_Q, E):
 def encrypt(P, Q, E, message):
     encrypted_message = ""
     PQ = P * Q
-    Multiples = splitIntoMultiplesOf2(E)
-    ValidMultiples = splitIntoValidMultiplesOf2(E)
+    Multiples = splitIntoPowersOf2(E)
+    ValidMultiples = splitIntoValidPowersOf2(E)
     for character in message:
         ascii = getAscii(character)
         k = 0
@@ -101,8 +101,8 @@ def decrypt(P, Q, E, message):
     plain_message = ""
     PQ = P * Q
     D = getD((P - 1) * (Q - 1), E)
-    Multiples = splitIntoMultiplesOf2(D)
-    ValidMultiples = splitIntoValidMultiplesOf2(D)
+    Multiples = splitIntoPowersOf2(D)
+    ValidMultiples = splitIntoValidPowersOf2(D)
     createValidList(Multiples, ValidMultiples)
     CharLength = len(str(PQ))
     for eachCharCoded in range(0, len(message), CharLength):
