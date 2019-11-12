@@ -75,14 +75,14 @@ def encrypt(P, Q, E, message):
     encyptedDict = {}
     encrypted_message = ""
     PQ = P * Q
-    Multiples = splitIntoPowersOf2(E)
-    ValidMultiples = splitIntoValidPowersOf2(E)
-    createValidList(Multiples, ValidMultiples)
+    multiples = splitIntoPowersOf2(E)
+    validMultiples = splitIntoValidPowersOf2(E)
+    createValidList(multiples, validMultiples)
     for character in message:
         if character in encyptedDict:
             EncryptedChar = encyptedDict[character]
         else:
-            EncryptedChar = encryptCharacter(PQ, character, Multiples);
+            EncryptedChar = encryptCharacter(PQ, character, multiples);
             encyptedDict[character] = EncryptedChar
         encrypted_message = encrypted_message + EncryptedChar
     return encrypted_message
