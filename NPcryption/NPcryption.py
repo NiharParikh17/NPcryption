@@ -6,11 +6,11 @@ def getAscii(character):
 def getCharacter(ascii):
     return chr(ascii)
 
-def splitIntoValidPowersOf2(E):
+def splitIntoValidPowersOf2(n):
     validMultiples = []
     i = 1
-    while i <= E:
-        if i & E:
+    while i <= n:
+        if i & n:
             validMultiples.append(i)
         i <<= 1
     return validMultiples
