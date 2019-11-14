@@ -1,5 +1,29 @@
 import math
 
+class DecryptionTable:
+    def __init__(self, PQ, E):
+        self.R: [] = [PQ, E]
+        self.X: [] = [1, 0]
+        self.D: [] = [0, 1]
+        self.Q: [] = [0, 0]
+
+    def generateTable(self):
+        currentRow = 2
+        nextR = None
+        while nextR != 1 and nextR != 0:
+            nextR = self.R[currentRow - 2] % self.R[currentRow - 1]
+            self.R.append(nextR)
+            nextQ = self.R[currentRow - 2] // self.R[currentRow - 1]
+            self.Q.append(nextQ)
+            self.X.append(self.X[currentRow - 2] - (self.X[currentRow - 1] * nextQ))
+            self.D.append(self.D[currentRow - 2] - (self.D[currentRow - 1] * nextQ))
+            currentRow += 1
+
+    def getD(self, PQ):
+        D = (self.D[len(self.D) - 1])
+        if D < 0: D = D + PQ
+        return D
+
 def getAscii(character):
     return ord(character)
 
@@ -46,22 +70,9 @@ def getProduct(List):
     return product
 
 def getD(P_Q, E):
-    ListOfD = [[P_Q, 1, 0, 0], [E, 0, 1, 0]]
-    nextR = P_Q % E
-    rows = 1
-    while nextR != 1 and nextR != 0:
-        rows = rows + 1
-        nextR = ListOfD[rows - 2][0] % ListOfD[rows - 1][0]
-        nextQ = ListOfD[rows - 2][0] // ListOfD[rows - 1][0]
-        nextX = ListOfD[rows - 2][1] - (ListOfD[rows - 1][1] * nextQ)
-        nextD = ListOfD[rows - 2][2] - (ListOfD[rows - 1][2] * nextQ)
-        ListOfD.append([nextR, nextX, nextD, nextQ])
-    D = (ListOfD[len(ListOfD) - 1][2])
-    if D < 0:
-        D = D + P_Q
-        return D
-    else:
-        return D
+    decryptT = DecryptionTable(P_Q, E)
+    decryptT.generateTable()
+    return decryptT.getD(P_Q)
 
 def encrypt(P, Q, E, message):
     encyptedDict = {}
