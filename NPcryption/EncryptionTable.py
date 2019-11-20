@@ -6,12 +6,12 @@ class EncryptionTable:
         self.prevSQR: [int] = []
         self.modNum: [int] = []
         self.validity: [bool] = []
+        self.initialize(n)
 
-        #Valid powers of 2
+    def initialize(self, n):
         validList = EncryptionTable.splitIntoValidPowersOf2(n)
-        #Splitting into powers of 2
         highPow = EncryptionTable.getHighestPowerOf2(n)
-        pow = 1 if n%2==1 else 2
+        pow = 1 if n % 2 == 1 else 2
         while (pow <= highPow):
             self.power.append(pow)
             self.prevSQR.append(0)
