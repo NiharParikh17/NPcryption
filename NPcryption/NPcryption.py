@@ -7,15 +7,6 @@ def getAscii(character):
 def getCharacter(ascii):
     return chr(ascii)
 
-def splitIntoValidPowersOf2(n):
-    validMultiples = []
-    i = 1
-    while i <= n:
-        if i & n:
-            validMultiples.append(i)
-        i <<= 1
-    return validMultiples
-
 def createValidList(List, List2):
     for x in range(0, len(List)):
         if List[x][0] in List2:
@@ -30,8 +21,7 @@ def encrypt(P, Q, E, message):
     encyptedDict = {}
     encrypted_message = ""
     PQ = P * Q
-    validMultiples = splitIntoValidPowersOf2(E)
-    powers = EncryptionTable(E, validMultiples)
+    powers = EncryptionTable(E)
     for character in message:
         if character in encyptedDict:
             EncryptedChar = encyptedDict[character]
@@ -64,8 +54,7 @@ def decrypt(P, Q, E, message):
     plain_message = ""
     PQ = P * Q
     D = getD((P - 1) * (Q - 1), E)
-    validMultiples = splitIntoValidPowersOf2(D)
-    powers = EncryptionTable(D, validMultiples)
+    powers = EncryptionTable(D)
     CharLength = len(str(PQ))
     for eachCharCoded in range(0, len(message), CharLength):
         codedChar = int(message[eachCharCoded:eachCharCoded + CharLength])
