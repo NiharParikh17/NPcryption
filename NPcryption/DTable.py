@@ -1,4 +1,4 @@
-class DecryptionTable:
+class DTable:
     def __init__(self, PQ, E):
         self.R: [] = [PQ, E]
         self.X: [] = [1, 0]
