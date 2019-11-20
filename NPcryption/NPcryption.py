@@ -1,4 +1,5 @@
 from DTable import DTable
+from DecryptionTable import DecryptionTable
 from EncryptionTable import EncryptionTable
 
 def getAscii(character):
@@ -49,7 +50,7 @@ def decrypt(P, Q, E, message):
     plain_message = ""
     PQ = P * Q
     D = getD((P - 1) * (Q - 1), E)
-    powers = EncryptionTable(D)
+    powers = DecryptionTable(D)
     CharLength = len(str(PQ))
     for eachCharCoded in range(0, len(message), CharLength):
         codedChar = int(message[eachCharCoded:eachCharCoded + CharLength])
