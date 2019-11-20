@@ -7,11 +7,6 @@ def getAscii(character):
 def getCharacter(ascii):
     return chr(ascii)
 
-def createValidList(List, List2):
-    for x in range(0, len(List)):
-        if List[x][0] in List2:
-            List[x][3] = "Y"
-
 def getD(P_Q, E):
     decryptT = DecryptionTable(P_Q, E)
     decryptT.generateTable()
