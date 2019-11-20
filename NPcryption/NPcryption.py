@@ -1,4 +1,4 @@
-from DecryptionTable import DecryptionTable
+from DTable import DTable
 from EncryptionTable import EncryptionTable
 
 def getAscii(character):
@@ -8,7 +8,7 @@ def getCharacter(ascii):
     return chr(ascii)
 
 def getD(P_Q, E):
-    decryptT = DecryptionTable(P_Q, E)
+    decryptT = DTable(P_Q, E)
     decryptT.generateTable()
     return decryptT.getD(P_Q)
 
