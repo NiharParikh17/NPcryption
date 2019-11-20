@@ -1,5 +1,5 @@
-import math
 from DecryptionTable import DecryptionTable
+from EncryptionTable import EncryptionTable
 
 def getAscii(character):
     return ord(character)
@@ -16,35 +16,10 @@ def splitIntoValidPowersOf2(n):
         i <<= 1
     return validMultiples
 
-def getHighestPowerOf2(n):
-    return 2 ** int(math.log(n, 2))
-
-def splitIntoPowersOf2(n):
-    multiples = []
-    two = getHighestPowerOf2(n)
-    while int(two) != 0:
-        multiples.append([int(two), 0, 0, "N"])
-        two = two // 2
-    multiples.sort()
-    return multiples
-
-def setPrevSQR(prevSQR, K, List):
-    List[K][1] = prevSQR
-
-def setModNum(modNum, K, List):
-    List[K][2] = modNum
-
 def createValidList(List, List2):
     for x in range(0, len(List)):
         if List[x][0] in List2:
             List[x][3] = "Y"
-
-def getProduct(List):
-    product = 1
-    for values in range(0, len(List)):
-        if List[values][3] == "Y":
-            product = product * List[values][2]
-    return product
 
 def getD(P_Q, E):
     decryptT = DecryptionTable(P_Q, E)
@@ -55,31 +30,30 @@ def encrypt(P, Q, E, message):
     encyptedDict = {}
     encrypted_message = ""
     PQ = P * Q
-    multiples = splitIntoPowersOf2(E)
     validMultiples = splitIntoValidPowersOf2(E)
-    createValidList(multiples, validMultiples)
+    powers = EncryptionTable(E, validMultiples)
     for character in message:
         if character in encyptedDict:
             EncryptedChar = encyptedDict[character]
         else:
-            EncryptedChar = encryptCharacter(PQ, character, multiples);
+            EncryptedChar = encryptCharacter(PQ, character, powers);
             encyptedDict[character] = EncryptedChar
         encrypted_message = encrypted_message + EncryptedChar
     return encrypted_message
 
-def encryptCharacter(PQ, character, Multiples):
+def encryptCharacter(PQ, character, powers):
     ascii = getAscii(character)
     k = 0
-    setPrevSQR(ascii, k, Multiples)
+    powers.setPrevSQR(ascii, k)
     modNum = ascii % PQ
-    setModNum(modNum, k, Multiples)
-    for multiple in range(0, len(Multiples) - 1):
+    powers.setModNum(modNum, k)
+    for x in range(0, powers.getLength() - 1):
         k = k + 1
         prevSQR = modNum * modNum
-        setPrevSQR(prevSQR, k, Multiples)
+        powers.setPrevSQR(prevSQR, k)
         modNum = prevSQR % PQ
-        setModNum(modNum, k, Multiples)
-    product = getProduct(Multiples)
+        powers.setModNum(modNum, k)
+    product = powers.getProduct()
     EncryptedChar = str(product % PQ)
     while len(str(EncryptedChar)) != len(str(PQ)):
         EncryptedChar = "0" + EncryptedChar
@@ -90,32 +64,31 @@ def decrypt(P, Q, E, message):
     plain_message = ""
     PQ = P * Q
     D = getD((P - 1) * (Q - 1), E)
-    multiples = splitIntoPowersOf2(D)
     validMultiples = splitIntoValidPowersOf2(D)
-    createValidList(multiples, validMultiples)
+    powers = EncryptionTable(D, validMultiples)
     CharLength = len(str(PQ))
     for eachCharCoded in range(0, len(message), CharLength):
         codedChar = int(message[eachCharCoded:eachCharCoded + CharLength])
         if codedChar in decryptDict:
             EncryptedSymbol = decryptDict[codedChar]
         else:
-            EncryptedSymbol = decryptCharacter(PQ, codedChar, multiples)
+            EncryptedSymbol = decryptCharacter(PQ, codedChar, powers)
             decryptDict[codedChar] = EncryptedSymbol
         plain_message = plain_message + EncryptedSymbol
     return plain_message
 
-def decryptCharacter(PQ, codedChar, Multiples):
+def decryptCharacter(PQ, codedChar, powers):
     k = 0
-    setPrevSQR(codedChar, k, Multiples)
+    powers.setPrevSQR(codedChar, k)
     modNum = codedChar % PQ
-    setModNum(modNum, k, Multiples)
-    for mult in range(0, len(Multiples) - 1):
+    powers.setModNum(modNum, k)
+    for x in range(0, powers.getLength() - 1):
         k = k + 1
         prevSQR = modNum * modNum
-        setPrevSQR(prevSQR, k, Multiples)
+        powers.setPrevSQR(prevSQR, k)
         modNum = prevSQR % PQ
-        setModNum(modNum, k, Multiples)
-    product = getProduct(Multiples)
+        powers.setModNum(modNum, k)
+    product = powers.getProduct()
     EncryptedSymbol = getCharacter(product % PQ)
     return EncryptedSymbol
 
