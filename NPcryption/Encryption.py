@@ -1,12 +1,15 @@
 from EncryptionTable import EncryptionTable
 
 def getAscii(character):
+    """Get the ascii value of the character"""
     return ord(character)
 
 def getCharacter(ascii):
+    """Get the character of the ascii value"""
     return chr(ascii)
 
 def encrypt(P, Q, E, message):
+    """Encrypting the given message using P, Q, and E"""
     encyptedDict = {}
     encrypted_message = ""
     PQ = P * Q
@@ -21,6 +24,7 @@ def encrypt(P, Q, E, message):
     return encrypted_message
 
 def encryptCharacter(PQ, character, powers):
+    """Encrypting a single given character"""
     ascii = getAscii(character)
     k = 0
     powers.setPrevSQR(ascii, k)
