@@ -2,9 +2,11 @@ import Encryption
 import Decryption
 
 def encrypt(P, Q, E, message):
+    """Encrypting the message by calling encrypt function in Encryption"""
     return Encryption.encrypt(P, Q, E, message)
 
 def decrypt(P, Q, E, message):
+    """Decrypting the message by calling decrypt function in Decryption"""
     return Decryption.decrypt(P, Q, E, message)
 
 def main():
