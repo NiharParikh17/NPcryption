@@ -1,12 +1,15 @@
 from DecryptionTable import DecryptionTable
 
 def getAscii(character):
+    """Get the ascii value of the character"""
     return ord(character)
 
 def getCharacter(ascii):
+    """Get the character of the ascii value"""
     return chr(ascii)
 
 def decrypt(P, Q, E, message):
+    """Decrypting the given message using P, Q, and E"""
     decryptDict = {}
     plain_message = ""
     PQ = P * Q
@@ -23,6 +26,7 @@ def decrypt(P, Q, E, message):
     return plain_message
 
 def decryptCharacter(PQ, codedChar, powers):
+    """Decrypting a single given character"""
     k = 0
     powers.setPrevSQR(codedChar, k)
     modNum = codedChar % PQ
