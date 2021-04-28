@@ -1,5 +1,11 @@
 #PyCharm generated files
 .idea/
+
+#Virtual Environment
 venv/
 
+#Scripts
+scripts/
+
+#Others
 __pycache__
