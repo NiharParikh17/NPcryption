@@ -70,11 +70,39 @@ def buildGUI():
     E_label.pack(side=tk.LEFT, padx=5, pady=5)
     E_entry.pack(fill=tk.X, padx=5)
 
+    #message input
+    frame_message_input = tk.Frame()
+    message_label = tk.Label(
+        master=frame_message_input,
+        text="Message:",
+        foreground="black"
+    )
+    message_entry = tk.Entry(
+        master=frame_message_input,
+        fg="black",
+        bg="white",
+        width=50
+    )
+    message_label.pack(side=tk.LEFT, padx=5, pady=5)
+    message_entry.pack(fill=tk.X, padx=5)
+
+    #Submit Button
+    frame_submit_button = tk.Frame()
+    button = tk.Button(
+        master=frame_submit_button,
+        text="Submit",
+        bg="black",
+        fg="white"
+    )
+    button.pack()
+
     #Packing the frames
     frame_heading.pack()
     frame_P_input.pack()
     frame_Q_input.pack()
     frame_E_input.pack()
+    frame_message_input.pack()
+    frame_submit_button.pack()
 
     window.mainloop()
 
