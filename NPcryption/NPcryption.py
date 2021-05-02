@@ -1,5 +1,6 @@
 import Encryption
 import Decryption
+import tkinter as tk
 
 def encrypt(P, Q, E, message):
     """Encrypting the message by calling encrypt function in Encryption"""
