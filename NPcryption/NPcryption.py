@@ -12,8 +12,15 @@ def decrypt(P, Q, E, message):
 
 def buildGUI():
     window = tk.Tk()
+    label = tk.Label(
+        text="NPcryption",
+        foreground="red"
+    )
+    label.pack()
+    window.mainloop()
 
 def main():
     print("GUI in progress!")
+    buildGUI()
 
 main()
