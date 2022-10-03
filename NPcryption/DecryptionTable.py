@@ -1,6 +1,7 @@
 from EncryptionTable import EncryptionTable
 from DTable import DTable
 
+
 class DecryptionTable(EncryptionTable):
     def __init__(self, PQ, E):
         d = DecryptionTable.getD(PQ, E)

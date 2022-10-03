@@ -1,5 +1,20 @@
 import math
 
+
+def splitIntoValidPowersOf2(n):
+    validMultiples = []
+    i = 1
+    while i <= n:
+        if i & n:
+            validMultiples.append(i)
+        i <<= 1
+    return validMultiples
+
+
+def getHighestPowerOf2(n):
+    return 2 ** int(math.log(n, 2))
+
+
 class EncryptionTable:
     def __init__(self, n):
         self.power: [int] = []
@@ -9,28 +24,16 @@ class EncryptionTable:
         self.initialize(n)
 
     def initialize(self, n):
-        validList = EncryptionTable.splitIntoValidPowersOf2(n)
-        highPow = EncryptionTable.getHighestPowerOf2(n)
+        validList = splitIntoValidPowersOf2(n)
+        highPow = getHighestPowerOf2(n)
         pow = 1 if n % 2 == 1 else 2
-        while (pow <= highPow):
+        while pow <= highPow:
             self.power.append(pow)
             self.prevSQR.append(0)
             self.modNum.append(0)
             val = True if pow in validList else False
             self.validity.append(val)
             pow *= 2
-
-    def getHighestPowerOf2(n):
-        return 2 ** int(math.log(n, 2))
-
-    def splitIntoValidPowersOf2(n):
-        validMultiples = []
-        i = 1
-        while i <= n:
-            if i & n:
-                validMultiples.append(i)
-            i <<= 1
-        return validMultiples
 
     def setPrevSQR(self, value, index):
         self.prevSQR[index] = value

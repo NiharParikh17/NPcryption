@@ -1,12 +1,15 @@
 from EncryptionTable import EncryptionTable
 
+
 def getAscii(character):
     """Get the ascii value of the character"""
     return ord(character)
 
+
 def getCharacter(ascii):
     """Get the character of the ascii value"""
     return chr(ascii)
+
 
 def encrypt(P, Q, E, message):
     """Encrypting the given message using P, Q, and E"""
@@ -18,10 +21,11 @@ def encrypt(P, Q, E, message):
         if character in encyptedDict:
             EncryptedChar = encyptedDict[character]
         else:
-            EncryptedChar = encryptCharacter(PQ, character, powers);
+            EncryptedChar = encryptCharacter(PQ, character, powers)
             encyptedDict[character] = EncryptedChar
         encrypted_message = encrypted_message + EncryptedChar
     return encrypted_message
+
 
 def encryptCharacter(PQ, character, powers):
     """Encrypting a single given character"""
