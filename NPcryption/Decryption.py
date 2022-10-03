@@ -1,12 +1,15 @@
 from DecryptionTable import DecryptionTable
 
+
 def getAscii(character):
     """Get the ascii value of the character"""
     return ord(character)
 
+
 def getCharacter(ascii):
     """Get the character of the ascii value"""
     return chr(ascii)
+
 
 def decrypt(P, Q, E, message):
     """Decrypting the given message using P, Q, and E"""
@@ -24,6 +27,7 @@ def decrypt(P, Q, E, message):
             decryptDict[codedChar] = EncryptedSymbol
         plain_message = plain_message + EncryptedSymbol
     return plain_message
+
 
 def decryptCharacter(PQ, codedChar, powers):
     """Decrypting a single given character"""

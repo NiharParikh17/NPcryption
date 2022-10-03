@@ -1,13 +1,16 @@
 import Encryption
 import Decryption
 
+
 def encrypt(P, Q, E, message):
     """Encrypting the message by calling encrypt function in Encryption"""
     return Encryption.encrypt(P, Q, E, message)
 
+
 def decrypt(P, Q, E, message):
     """Decrypting the message by calling decrypt function in Decryption"""
     return Decryption.decrypt(P, Q, E, message)
+
 
 def main():
     answer = input("Press E for Encryption or D for Decryption: ")
@@ -22,5 +25,6 @@ def main():
     elif answer == "D" or answer == "d":
         message = input("Encrypted Message: ")
         print(decrypt(P, Q, E, message))
+
 
 main()
