@@ -1,4 +1,4 @@
-from EncryptionTable import EncryptionTable
+from .EncryptionTable import EncryptionTable
 
 
 def getAscii(character):

@@ -1,5 +1,5 @@
-from EncryptionTable import EncryptionTable
-from DTable import DTable
+from .EncryptionTable import EncryptionTable
+from .DTable import DTable
 
 
 class DecryptionTable(EncryptionTable):
