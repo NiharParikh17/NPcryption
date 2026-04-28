@@ -38,7 +38,7 @@ class TestDecryptionTableInit:
         """phi=288, E=5 → D=173; EncryptionTable(173) has 8 rows."""
         dt = DecryptionTable(288, 5)
         # 173 = 128+32+8+4+1 (5 set bits); highest power 128 → 8 rows
-        assert dt.getLength() == 8
+        assert dt.get_length() == 8
 
     def test_phi288_E5_initial_prevSQR_zeros(self):
         dt = DecryptionTable(288, 5)
@@ -51,7 +51,7 @@ class TestDecryptionTableInit:
     def test_phi20_E7_length(self):
         """D=3, EncryptionTable(3) has 2 rows."""
         dt = DecryptionTable(20, 7)
-        assert dt.getLength() == 2
+        assert dt.get_length() == 2
 
     def test_phi3120_E17_correct_D(self):
         """P=61,Q=53 → phi=3120, E=17 → D satisfies 17*D ≡ 1 mod 3120."""
@@ -60,7 +60,7 @@ class TestDecryptionTableInit:
         tbl = DTable(3120, 17)
         tbl.generateTable()
         expected_D = tbl.getD(3120)
-        assert dt.getLength() == len(
+        assert dt.get_length() == len(
             [i for i in range(expected_D.bit_length()) if expected_D >> i & 1 or i == 0]
         ) or dt.power[-1] <= expected_D  # highest power ≤ D
 
@@ -95,18 +95,17 @@ class TestDecryptionTableInheritedMethods:
 
     def test_setPrevSQR(self):
         dt = DecryptionTable(20, 7)
-        dt.setPrevSQR(32, 0)
+        dt.set_prev_sqr(32, 0)
         assert dt.prevSQR[0] == 32
 
     def test_setModNum(self):
         dt = DecryptionTable(20, 7)
-        dt.setModNum(7, 0)
+        dt.set_mod_num(7, 0)
         assert dt.modNum[0] == 7
 
     def test_getProduct_with_set_values(self):
         """D=3 → power=[1,2], validity=[T,T]; product = modNum[0]*modNum[1]."""
         dt = DecryptionTable(20, 7)
-        dt.setModNum(5, 0)
-        dt.setModNum(4, 1)
-        assert dt.getProduct() == 20
-
+        dt.set_mod_num(5, 0)
+        dt.set_mod_num(4, 1)
+        assert dt.get_product() == 20
