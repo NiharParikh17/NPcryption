@@ -3,9 +3,30 @@
 
 #Virtual Environment
 venv/
+.venv/
 
 #Scripts
 scripts/
 
 #Others
-__pycache__
+__pycache__/
+*.py[cod]
+.DS_Store
+
+# Build / distribution
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Packaging
+MANIFEST
+
+# Testing & coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
