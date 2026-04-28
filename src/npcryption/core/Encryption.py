@@ -1,4 +1,4 @@
-from EncryptionTable import EncryptionTable
+from .EncryptionTable import EncryptionTable
 
 
 def getAscii(character):
@@ -31,16 +31,16 @@ def encryptCharacter(PQ, character, powers):
     """Encrypting a single given character"""
     ascii = getAscii(character)
     k = 0
-    powers.setPrevSQR(ascii, k)
+    powers.set_prev_sqr(ascii, k)
     modNum = ascii % PQ
-    powers.setModNum(modNum, k)
-    for x in range(0, powers.getLength() - 1):
+    powers.set_mod_num(modNum, k)
+    for x in range(0, powers.get_length() - 1):
         k = k + 1
         prevSQR = modNum * modNum
-        powers.setPrevSQR(prevSQR, k)
+        powers.set_prev_sqr(prevSQR, k)
         modNum = prevSQR % PQ
-        powers.setModNum(modNum, k)
-    product = powers.getProduct()
+        powers.set_mod_num(modNum, k)
+    product = powers.get_product()
     EncryptedChar = str(product % PQ)
     while len(str(EncryptedChar)) != len(str(PQ)):
         EncryptedChar = "0" + EncryptedChar
