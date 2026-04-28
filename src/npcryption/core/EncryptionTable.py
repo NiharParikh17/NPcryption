@@ -1,7 +1,7 @@
 import math
 
 
-def splitIntoValidPowersOf2(n):
+def split_into_valid_powers_of_2(n):
     validMultiples = []
     i = 1
     while i <= n:
@@ -11,7 +11,7 @@ def splitIntoValidPowersOf2(n):
     return validMultiples
 
 
-def getHighestPowerOf2(n):
+def get_highest_power_of_2(n):
     return 2 ** int(math.log(n, 2))
 
 
@@ -24,8 +24,8 @@ class EncryptionTable:
         self.initialize(n)
 
     def initialize(self, n):
-        validList = splitIntoValidPowersOf2(n)
-        highPow = getHighestPowerOf2(n)
+        validList = split_into_valid_powers_of_2(n)
+        highPow = get_highest_power_of_2(n)
         pow = 1 if n % 2 == 1 else 2
         while pow <= highPow:
             self.power.append(pow)
@@ -35,18 +35,18 @@ class EncryptionTable:
             self.validity.append(val)
             pow *= 2
 
-    def setPrevSQR(self, value, index):
+    def set_prev_sqr(self, value, index):
         self.prevSQR[index] = value
 
-    def setModNum(self, value, index):
+    def set_mod_num(self, value, index):
         self.modNum[index] = value
 
-    def getProduct(self):
+    def get_product(self):
         product = 1
         for index in range(0, len(self.power)):
             if self.validity[index]:
                 product *= self.modNum[index]
         return product
 
-    def getLength(self):
+    def get_length(self):
         return len(self.power)

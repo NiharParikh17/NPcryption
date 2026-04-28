@@ -1,4 +1,4 @@
-from DecryptionTable import DecryptionTable
+from .DecryptionTable import DecryptionTable
 
 
 def getAscii(character):
@@ -32,15 +32,15 @@ def decrypt(P, Q, E, message):
 def decryptCharacter(PQ, codedChar, powers):
     """Decrypting a single given character"""
     k = 0
-    powers.setPrevSQR(codedChar, k)
+    powers.set_prev_sqr(codedChar, k)
     modNum = codedChar % PQ
-    powers.setModNum(modNum, k)
-    for x in range(0, powers.getLength() - 1):
+    powers.set_mod_num(modNum, k)
+    for x in range(0, powers.get_length() - 1):
         k = k + 1
         prevSQR = modNum * modNum
-        powers.setPrevSQR(prevSQR, k)
+        powers.set_prev_sqr(prevSQR, k)
         modNum = prevSQR % PQ
-        powers.setModNum(modNum, k)
-    product = powers.getProduct()
+        powers.set_mod_num(modNum, k)
+    product = powers.get_product()
     EncryptedSymbol = getCharacter(product % PQ)
     return EncryptedSymbol
