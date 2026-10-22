@@ -6,7 +6,6 @@ Covers:
   - DTable.generateTable: Extended Euclidean Algorithm rows
   - DTable.getD: returns the modular inverse, ensures positive result
 """
-import pytest
 from npcryption.core.DTable import DTable
 
 
@@ -116,8 +115,7 @@ class TestDTableGenerateTable:
         dt.generateTable()
         D1 = dt.getD(20)
         dt.generateTable()
-        D2 = dt.getD(20)
-        # NOTE: calling it twice extends the lists, so D2 may not equal D1.
+        # NOTE: calling it twice extends the lists, so a second getD() may not equal D1.
         # The important check is that a fresh call gives the same initial D.
         assert D1 == 3  # verify the first call was correct
 
@@ -161,4 +159,3 @@ class TestDTableGetD:
             dt.generateTable()
             D = dt.getD(phi)
             assert 1 <= D < phi
-

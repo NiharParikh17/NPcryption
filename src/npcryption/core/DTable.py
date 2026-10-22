@@ -19,5 +19,6 @@ class DTable:
 
     def getD(self, PQ):
         D = (self.D[len(self.D) - 1])
-        if D < 0: D = D + PQ
+        if D < 0:
+            D = D + PQ
         return D

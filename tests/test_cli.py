@@ -18,12 +18,7 @@ NOTE: Because of the module-level `main()` call, some tests verify the
 output produced *during import* by capturing stdout.
 """
 import sys
-import importlib
-import importlib.util
-import types
-from io import StringIO
-from unittest.mock import patch, MagicMock
-import pytest
+from unittest.mock import patch
 import npcryption.core.Encryption as _enc_mod
 import npcryption.core.Decryption as _dec_mod
 
@@ -180,4 +175,3 @@ class TestCliMain:
 
         captured = capsys.readouterr()
         assert expected in captured.out
-

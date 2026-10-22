@@ -8,7 +8,6 @@ Covers:
   - encrypt() — including empty string, single char, multi-char,
     repeated characters (caching), zero-padding, block width
 """
-import pytest
 from npcryption.core.Encryption import encrypt, encryptCharacter, getAscii, getCharacter
 from npcryption.core.EncryptionTable import EncryptionTable
 
@@ -229,9 +228,8 @@ class TestEncrypt:
 
     def test_zero_padding_present(self):
         """Cipher block must always be exactly len(str(N)) chars, possibly zero-padded."""
-        N = P17 * Q19  # 323 → 3 digits
         result = encrypt(P17, Q19, E5, 'A')
-        assert len(result) == 3
+        assert len(result) == 3  # N = 323 → 3 digits
         # '012' starts with '0' → zero-padding is applied
         assert result[0] == '0'
 
@@ -265,4 +263,3 @@ class TestEncrypt:
         N = P17 * Q19
         result = encrypt(P17, Q19, E5, msg)
         assert len(result) == len(msg) * len(str(N))
-

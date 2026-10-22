@@ -7,7 +7,6 @@ Covers:
   - EncryptionTable class: __init__, initialize, set_prev_sqr, set_mod_num,
     get_product, get_length
 """
-import pytest
 from npcryption.core.EncryptionTable import (
     split_into_valid_powers_of_2,
     get_highest_power_of_2,

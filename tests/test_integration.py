@@ -232,4 +232,3 @@ class TestAllPrintableASCII:
         cipher = encrypt(P, Q, E, msg)
         plain = decrypt(P, Q, E, cipher)
         assert plain == msg
-
