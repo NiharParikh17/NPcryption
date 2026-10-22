@@ -10,7 +10,7 @@ This document describes every language, runtime, framework, and tooling decision
 |---|---|
 | **Language** | Python |
 | **Minimum version** | Python 3.10 |
-| **Tested on** | Python 3.10, 3.11, 3.12 |
+| **Tested on** | Python 3.10, 3.11, 3.12 (CI matrix) |
 
 Python was chosen for its readability and its suitability for expressing mathematical algorithms concisely. No external runtime is required.
 
@@ -24,7 +24,7 @@ NPcryption uses only the Python **standard library** — there are **zero third-
 |---|---|---|
 | `math` | `EncryptionTable.py` | `math.log` to find the highest power of 2 ≤ n |
 | `builtins.ord` | `Encryption.py`, `Decryption.py` | Convert a character to its ASCII integer value |
-| `builtins.chr` | `Decryption.py` | Convert an ASCII integer back to a character |
+| `builtins.chr` | `Encryption.py`, `Decryption.py` | Convert an ASCII integer back to a character |
 
 ---
 
@@ -42,14 +42,19 @@ NPcryption uses only the Python **standard library** — there are **zero third-
 ```toml
 [build-system]
 requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "npcryption"
 version = "0.1.0"
+license = { file = "LICENSE" }
 requires-python = ">=3.10"
 keywords = ["rsa", "cryptography", "encryption", "decryption"]
 ```
+
+> **Note:** Current setuptools releases warn that the `license = { file = ... }` table form and the `License ::` classifier are deprecated in favour of an SPDX string (`license = "MIT"`), with support ending on 2027-02-18. The build still succeeds today.
+
+The package version is declared in two places, `pyproject.toml` and `src/npcryption/__init__.py`. The release workflow fails if they differ from the pushed tag.
 
 ---
 
@@ -65,7 +70,7 @@ src/
     └── core/
 ```
 
-This means the package is only importable when properly installed (e.g. `pip install -e .`), preventing accidental imports from the repository root.
+This means the package is only importable when properly installed (e.g. `pip install -e .`), preventing accidental imports from the repository root. The one exception is the test suite: `tests/conftest.py` adds `src/` to `sys.path` so `pytest` also works without an install.
 
 ---
 
@@ -78,7 +83,7 @@ Defined in `pyproject.toml`:
 npcryption = "npcryption.cli:main"
 ```
 
-After installation, running `npcryption` in any terminal calls `cli.main()`.
+After installation, running `npcryption` in any terminal calls `cli.main()`. In v0.1.0 this fails at import time; see the [CLI Guide](cli.md#known-issue-in-v010).
 
 ---
 
@@ -88,6 +93,9 @@ After installation, running `npcryption` in any terminal calls `cli.main()`.
 |---|---|---|
 | **pytest** | `setup.cfg` → `[tool:pytest]` | Test runner |
 | **flake8** | `setup.cfg` → `[flake8]` | PEP 8 style linting, max line length 100 |
+| **build** | — | Builds the sdist and wheel (`python -m build`) |
+| **twine** | — | Validates distribution metadata (`twine check --strict`) |
+| **GitHub Actions** | `.github/workflows/` | CI (lint, tests, build) and tag-driven releases |
 
 ### pytest configuration
 

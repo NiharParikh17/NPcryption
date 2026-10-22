@@ -7,7 +7,6 @@ Covers:
   - Top-level encrypt() and decrypt() are importable and functional
   - Package metadata consistency
 """
-import pytest
 import npcryption
 from npcryption import encrypt, decrypt
 
@@ -103,4 +102,3 @@ class TestPublicAPIFunctionIdentity:
     def test_decrypt_is_core_decrypt(self):
         from npcryption.core.Decryption import decrypt as core_decrypt
         assert decrypt is core_decrypt
-

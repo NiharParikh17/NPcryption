@@ -18,7 +18,7 @@ No third-party runtime packages are required.
 Clone the repository and install in editable mode:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/NiharParikh17/NPcryption.git
 cd NPcryption
 pip install -e .
 ```
@@ -44,6 +44,8 @@ npcryption
 
 This invokes `npcryption.cli:main` as registered in `pyproject.toml`.
 
+> **Note:** In v0.1.0 this command fails with `ModuleNotFoundError: No module named 'Encryption'`. See the [CLI Guide](cli.md#known-issue-in-v010) for the cause and a workaround. The library API below is unaffected.
+
 ---
 
 ## Use as a Library
@@ -51,11 +53,12 @@ This invokes `npcryption.cli:main` as registered in `pyproject.toml`.
 ```python
 from npcryption import encrypt, decrypt
 
-# Choose primes P, Q and a public exponent E coprime with (P-1)*(Q-1)
+# Choose primes P, Q and a public exponent E coprime with (P-1)*(Q-1).
+# N = P*Q must be larger than every character code in the message.
 P, Q, E = 61, 53, 17
 
 ciphertext = encrypt(P, Q, E, "Hello, World!")
-print(ciphertext)
+print(ciphertext)  # → 3000131307450745218506781992060421852412074517731853
 
 plaintext = decrypt(P, Q, E, ciphertext)
 print(plaintext)   # → Hello, World!
@@ -82,6 +85,14 @@ For running tests and linting, install optional tools:
 pip install pytest flake8
 ```
 
+To reproduce the CI packaging checks locally, also install `build` and `twine`:
+
+```bash
+pip install build twine
+python -m build
+twine check --strict dist/*
+```
+
 ---
 
 ## Virtual Environment (Recommended)
@@ -103,4 +114,6 @@ pip install pytest flake8
 |---|---|
 | `pyproject.toml` | Build system configuration, project metadata, entry points |
 | `setup.cfg` | pytest and flake8 tool configuration |
+| `.github/workflows/ci.yml` | CI: lint, test matrix and package build |
+| `.github/workflows/release.yml` | Release: publishes a GitHub release for `v*` tags |
 

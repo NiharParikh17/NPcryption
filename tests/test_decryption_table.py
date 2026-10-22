@@ -7,7 +7,6 @@ Covers:
   - DecryptionTable builds the squaring table for exponent D
   - DecryptionTable.getD static method
 """
-import pytest
 from npcryption.core.DecryptionTable import DecryptionTable
 from npcryption.core.EncryptionTable import EncryptionTable
 from npcryption.core.DTable import DTable

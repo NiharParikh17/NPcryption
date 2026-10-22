@@ -1,4 +1,3 @@
 """
 tests package for NPcryption.
 """
-
