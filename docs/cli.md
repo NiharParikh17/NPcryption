@@ -4,48 +4,26 @@ NPcryption ships with an interactive command-line interface that lets you encryp
 
 ---
 
-## Known issue in v0.1.0
-
-`src/npcryption/cli.py` imports its dependencies with bare module names:
-
-```python
-import Encryption
-import Decryption
-```
-
-Those modules live in `npcryption.core`, so the imports do not resolve and every documented way of starting the CLI currently fails:
-
-```
-$ npcryption
-Traceback (most recent call last):
-  ...
-  File ".../src/npcryption/cli.py", line 1, in <module>
-    import Encryption
-ModuleNotFoundError: No module named 'Encryption'
-```
-
-The same error occurs with `python -m npcryption.cli` and `python src/npcryption/cli.py`.
-
-### Workaround
-
-Until `cli.py` is fixed, register the core modules under the names it expects and then import it. Because `cli.py` calls `main()` at import time, the import starts the interactive session:
-
-```bash
-python -c "import sys, npcryption.core.Encryption as e, npcryption.core.Decryption as d; sys.modules.update(Encryption=e, Decryption=d); import npcryption.cli"
-```
-
-This is the same technique the test suite uses in `tests/test_cli.py`. Alternatively, use the [library API](api-reference.md) directly.
-
----
-
 ## Running the CLI
 
-Once the import issue above is fixed, the CLI is started with the console script registered in `pyproject.toml`:
+### After installation
+
+The console script registered in `pyproject.toml` calls `npcryption.cli:main`:
 
 ```bash
 pip install -e .
 npcryption
 ```
+
+### As a module
+
+Equivalent, and works wherever the package is importable:
+
+```bash
+python -m npcryption.cli
+```
+
+Importing `npcryption.cli` from Python does **not** start the prompt; call `npcryption.cli.main()` to run it.
 
 ---
 
@@ -155,7 +133,5 @@ All of these have N ≥ 127, so they work for any printable ASCII message.
 
 ## Limitations
 
-- See the [known issue](#known-issue-in-v010) above: the console script does not start in v0.1.0.
-- `cli.py` calls `main()` at module level (there is no `if __name__ == "__main__":` guard), so importing `npcryption.cli` starts the interactive prompt.
 - All inputs are read from stdin; there is no support for file input or command-line flags in v0.1.0.
 - Characters are encrypted individually via their code point. Any character whose code point is ≥ N (for example most non-ASCII characters with small keys) will not decrypt correctly.

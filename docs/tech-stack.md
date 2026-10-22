@@ -83,7 +83,7 @@ Defined in `pyproject.toml`:
 npcryption = "npcryption.cli:main"
 ```
 
-After installation, running `npcryption` in any terminal calls `cli.main()`. In v0.1.0 this fails at import time; see the [CLI Guide](cli.md#known-issue-in-v010).
+After installation, running `npcryption` in any terminal calls `cli.main()`.
 
 ---
 

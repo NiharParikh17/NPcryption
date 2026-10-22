@@ -74,7 +74,6 @@ flake8 src/ tests/
 
 ## Areas for Contribution
 
-- **Fix the CLI imports** — `cli.py` uses bare `import Encryption` / `import Decryption` and calls `main()` at import time, so the `npcryption` command fails (see the [CLI Guide](cli.md#known-issue-in-v010)). Switching to package imports and adding an `if __name__ == "__main__":` guard would also let `tests/test_cli.py` drop its workarounds.
 - **CLI improvements** — Accept command-line arguments (e.g. argparse), support file I/O, reject an invalid E/D choice before asking for keys.
 - **Padding scheme** — Implement PKCS#1 v1.5 or OAEP padding for educational parity with real-world RSA.
 - **Key validation** — Validate that P and Q are prime, that E is coprime with φ(N), and that N exceeds every character code at call time.
