@@ -85,9 +85,10 @@ flake8 src/ tests/
 
 ## Reporting Issues
 
-Open a GitHub Issue and include:
-- Python version (`python --version`)
-- Operating system
-- Steps to reproduce
-- Expected vs. actual behaviour
+[Open a new issue](https://github.com/NiharParikh17/NPcryption/issues/new/choose) and choose a form:
+
+- **Bug report**: asks for the steps to reproduce (including P, Q, E and the message), expected vs. actual behaviour, and the NPcryption, Python and OS versions.
+- **Feature request**: asks for the problem and the proposed solution.
+
+The forms live in `.github/ISSUE_TEMPLATE/`. A blank issue is still available for anything else.
 
