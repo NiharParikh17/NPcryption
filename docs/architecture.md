@@ -35,10 +35,14 @@ NPcryption/
 │   ├── test_decryption_table.py   # DecryptionTable
 │   ├── test_dtable.py             # DTable (Extended Euclidean Algorithm)
 │   ├── test_cli.py                # cli wrappers and main()
-│   └── test_integration.py        # encrypt ↔ decrypt round-trips
+│   ├── test_integration.py        # encrypt ↔ decrypt round-trips
+│   └── test_web_demo.py           # web/demo.py, the website's bridge to the library
 ├── docs/                          # This documentation
-├── web/
-│   └── index.html                 # Project website, published by pages.yml
+├── web/                           # Website, published by pages.yml
+│   ├── index.html                 # Page structure and copy
+│   ├── styles.css                 # Light/dark themes and responsive layout
+│   ├── app.js                     # Starts Pyodide, handles input, renders each step
+│   └── demo.py                    # Runs inside Pyodide; returns the library's intermediate values
 ├── LICENSE                        # MIT License
 ├── README.md                      # Quick-start readme
 ├── pyproject.toml                 # Build metadata and entry points
