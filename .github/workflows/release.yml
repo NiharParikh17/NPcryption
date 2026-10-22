@@ -1,8 +1,19 @@
 name: Release
 
+# A release is made for the version in pyproject.toml when:
+#   - a change to the version reaches main (the tag is created automatically),
+#   - the workflow is run manually on main from the Actions tab, or
+#   - a matching v* tag is pushed by hand.
+# Tags created by this workflow do not trigger it again: GitHub does not start
+# workflows for events caused by the built-in GITHUB_TOKEN.
 on:
   push:
+    branches: [main]
+    paths:
+      - pyproject.toml
+      - src/npcryption/__init__.py
     tags: ["v*"]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -10,15 +21,70 @@ permissions:
 env:
   PIP_DISABLE_PIP_VERSION_CHECK: "1"
 
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
+  version:
+    name: Check version
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+      release: ${{ steps.version.outputs.release }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Decide whether to release
+        id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          pyproject_version=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])")
+          init_version=$(sed -n 's/^__version__ = "\(.*\)"$/\1/p' src/npcryption/__init__.py)
+          if [ "$pyproject_version" != "$init_version" ]; then
+            echo "::error::pyproject.toml ($pyproject_version) and npcryption.__version__ ($init_version) differ"
+            exit 1
+          fi
+          tag="v$pyproject_version"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+          if [ "$GITHUB_REF_TYPE" = "tag" ]; then
+            if [ "$GITHUB_REF_NAME" != "$tag" ]; then
+              echo "::error::Tag $GITHUB_REF_NAME does not match the package version $pyproject_version"
+              exit 1
+            fi
+          elif [ "$GITHUB_REF" != "refs/heads/main" ]; then
+            echo "::error::Releases can only be made from main, not $GITHUB_REF"
+            exit 1
+          elif git ls-remote --exit-code --tags origin "refs/tags/$tag" > /dev/null; then
+            echo "::notice::$tag already exists. Bump the version to make a new release."
+            echo "release=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if gh release view "$tag" > /dev/null 2>&1; then
+            echo "::notice::Release $tag already exists."
+            echo "release=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Releasing $tag"
+            echo "release=true" >> "$GITHUB_OUTPUT"
+          fi
+
   ci:
     name: CI
+    needs: version
+    if: needs.version.outputs.release == 'true'
     uses: ./.github/workflows/ci.yml
 
   release:
     name: Publish GitHub release
     runs-on: ubuntu-latest
-    needs: ci
+    needs: [version, ci]
+    if: needs.version.outputs.release == 'true'
     permissions:
       contents: write
     steps:
@@ -26,23 +92,15 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - name: Check tag matches package version
-        run: |
-          pyproject_version=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])")
-          init_version=$(sed -n 's/^__version__ = "\(.*\)"$/\1/p' src/npcryption/__init__.py)
-          tag_version="${GITHUB_REF_NAME#v}"
-          echo "tag=$tag_version pyproject=$pyproject_version __init__=$init_version"
-          if [ "$tag_version" != "$pyproject_version" ] || [ "$tag_version" != "$init_version" ]; then
-            echo "::error::Tag $GITHUB_REF_NAME does not match the package version in pyproject.toml and src/npcryption/__init__.py"
-            exit 1
-          fi
       - name: Install build tools
         run: python -m pip install build twine
       - name: Build sdist and wheel
         run: python -m build
       - name: Check distribution metadata
         run: twine check --strict dist/*
-      - name: Create GitHub release
+      - name: Create tag and GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" dist/* --title "$GITHUB_REF_NAME" --generate-notes --verify-tag
+          TAG: ${{ needs.version.outputs.tag }}
+        # Creates the tag at the tested commit unless it already exists.
+        run: gh release create "$TAG" dist/* --target "$GITHUB_SHA" --title "$TAG" --generate-notes
