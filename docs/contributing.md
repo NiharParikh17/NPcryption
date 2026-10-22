@@ -16,8 +16,7 @@ Thank you for your interest in contributing to NPcryption!
    ```bash
    python -m venv .venv
    source .venv/bin/activate
-   pip install -e .
-   pip install pytest flake8
+   pip install -e . pytest flake8
    ```
 4. Create a **feature branch**:
    ```bash
@@ -47,8 +46,10 @@ flake8 src/ tests/
 |---|---|
 | **src layout** | All package code lives under `src/npcryption/` |
 | **File naming** | Core module files use PascalCase (e.g. `EncryptionTable.py`) |
-| **Test naming** | Test files: `test_*.py`; test functions: `test_*` |
+| **Method naming** | `EncryptionTable` uses snake_case (`get_product`, `set_mod_num`); the other core modules still use camelCase (`encryptCharacter`, `generateTable`, `getD`) |
+| **Test naming** | Test files: `test_*.py`; test classes: `Test*`; test functions: `test_*` |
 | **No external deps** | Runtime code must use only the Python standard library |
+| **Version string** | Keep `pyproject.toml` and `npcryption.__version__` in sync |
 
 ---
 
@@ -66,17 +67,19 @@ flake8 src/ tests/
    ```bash
    git commit -m "feat: add padding validation for encrypt()"
    ```
-4. **Push** and open a **Pull Request** against the `main` branch.
+4. **Push** and open a **Pull Request** against the `master` branch.
+5. Wait for the **CI** checks (lint, tests on Python 3.10–3.12, package build) to pass. See [Testing](testing.md#continuous-integration) for what runs.
 
 ---
 
 ## Areas for Contribution
 
-- **Tests** — The `tests/` directory is currently empty. Writing comprehensive unit and integration tests is the highest-priority contribution.
-- **CLI improvements** — Accept command-line arguments (e.g. argparse), support file I/O.
+- **Fix the CLI imports** — `cli.py` uses bare `import Encryption` / `import Decryption` and calls `main()` at import time, so the `npcryption` command fails (see the [CLI Guide](cli.md#known-issue-in-v010)). Switching to package imports and adding an `if __name__ == "__main__":` guard would also let `tests/test_cli.py` drop its workarounds.
+- **CLI improvements** — Accept command-line arguments (e.g. argparse), support file I/O, reject an invalid E/D choice before asking for keys.
 - **Padding scheme** — Implement PKCS#1 v1.5 or OAEP padding for educational parity with real-world RSA.
-- **Key validation** — Validate that P and Q are prime and that E is coprime with φ(N) at call time.
-- **CI/CD** — Add a GitHub Actions workflow (see [Testing](testing.md)).
+- **Key validation** — Validate that P and Q are prime, that E is coprime with φ(N), and that N exceeds every character code at call time.
+- **Packaging** — Move `project.license` to an SPDX string (`license = "MIT"`) before setuptools drops the table form on 2027-02-18; consider publishing to PyPI from the release workflow.
+- **Tests** — Extend coverage, e.g. for invalid keys and non-ASCII input.
 - **Documentation** — Improve or expand any doc page.
 
 ---
