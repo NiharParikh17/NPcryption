@@ -4,26 +4,54 @@ NPcryption ships with an interactive command-line interface that lets you encryp
 
 ---
 
+## Known issue in v0.1.0
+
+`src/npcryption/cli.py` imports its dependencies with bare module names:
+
+```python
+import Encryption
+import Decryption
+```
+
+Those modules live in `npcryption.core`, so the imports do not resolve and every documented way of starting the CLI currently fails:
+
+```
+$ npcryption
+Traceback (most recent call last):
+  ...
+  File ".../src/npcryption/cli.py", line 1, in <module>
+    import Encryption
+ModuleNotFoundError: No module named 'Encryption'
+```
+
+The same error occurs with `python -m npcryption.cli` and `python src/npcryption/cli.py`.
+
+### Workaround
+
+Until `cli.py` is fixed, register the core modules under the names it expects and then import it. Because `cli.py` calls `main()` at import time, the import starts the interactive session:
+
+```bash
+python -c "import sys, npcryption.core.Encryption as e, npcryption.core.Decryption as d; sys.modules.update(Encryption=e, Decryption=d); import npcryption.cli"
+```
+
+This is the same technique the test suite uses in `tests/test_cli.py`. Alternatively, use the [library API](api-reference.md) directly.
+
+---
+
 ## Running the CLI
 
-### After installation
+Once the import issue above is fixed, the CLI is started with the console script registered in `pyproject.toml`:
 
 ```bash
 pip install -e .
 npcryption
 ```
 
-### Without installation (from the project root)
-
-```bash
-python src/npcryption/cli.py
-```
-
 ---
 
 ## Interactive Session
 
-When you run `npcryption` you will be prompted step by step.
+You will be prompted step by step.
 
 ### Step 1 — Choose operation
 
@@ -43,7 +71,10 @@ Enter Public Key E:
 
 - `P` and `Q` must be **distinct prime numbers**.
 - `E` must be **coprime** with `(P−1) × (Q−1)`.
-- All three must be **positive integers**.
+- `N = P × Q` must be **larger than the code point of every character** in the message (at least 127 for printable ASCII).
+- All three must be **integers**; anything else raises `ValueError`.
+
+The key parameters are read before the choice from step 1 is checked. If you typed anything other than `E`, `e`, `D` or `d`, the CLI exits after this step without printing anything.
 
 > **Important:** You must use the **same P, Q, and E values** for both encryption and decryption of the same message.
 
@@ -72,14 +103,14 @@ The encrypted ciphertext (or recovered plaintext) is printed to the terminal.
 ```
 $ npcryption
 Press E for Encryption or D for Decryption: E
-Enter Private Key P: 3
-Enter Private Key Q: 11
-Enter Public Key E: 7
+Enter Private Key P: 17
+Enter Private Key Q: 19
+Enter Public Key E: 5
 Enter Message: Hello
-3203030303
+021271109109042
 ```
 
-*(Output is illustrative.)*
+N = 323 has three digits, so each character becomes a three-digit block: `021` `271` `109` `109` `042`.
 
 ---
 
@@ -88,14 +119,12 @@ Enter Message: Hello
 ```
 $ npcryption
 Press E for Encryption or D for Decryption: D
-Enter Private Key P: 3
-Enter Private Key Q: 11
-Enter Public Key E: 7
-Encrypted Message: 3203030303
+Enter Private Key P: 17
+Enter Private Key Q: 19
+Enter Public Key E: 5
+Encrypted Message: 021271109109042
 Hello
 ```
-
-*(Output is illustrative.)*
 
 ---
 
@@ -103,25 +132,30 @@ Hello
 
 | Requirement | Rule |
 |---|---|
-| P and Q must be prime | e.g. 3, 5, 7, 11, 13, 17, 19, 23 … |
+| P and Q must be prime | e.g. 11, 13, 17, 19, 53, 61, 101, 103 … |
 | P ≠ Q | Using the same prime twice degrades security |
 | `gcd(E, (P-1)*(Q-1)) == 1` | E must be coprime with the totient |
 | `1 < E < (P-1)*(Q-1)` | E must lie in this range |
+| `N = P*Q > ord(c)` for every character `c` | Otherwise the character cannot be recovered |
+
+None of these rules are checked by NPcryption. Invalid keys still produce a ciphertext, but it will not decrypt to the original message.
 
 ### Common valid combinations
 
+All of these have N ≥ 127, so they work for any printable ASCII message.
+
 | P | Q | N | φ(N) | Valid E values (sample) |
 |---|---|---|---|---|
-| 3 | 11 | 33 | 20 | 3, 7, 9, 11, 13, 17, 19 |
-| 5 | 11 | 55 | 40 | 3, 7, 9, 11, 13, 17, 21, 23 |
-| 7 | 11 | 77 | 60 | 7, 11, 13, 17, 19, 23, 29, 31 |
-| 11 | 13 | 143 | 120 | 7, 11, 13, 17, 23, 37, 41, 43 |
+| 11 | 13 | 143 | 120 | 7, 11, 13, 17, 19, 23, 29, 31 |
+| 17 | 19 | 323 | 288 | 5, 7, 11, 13, 17, 19, 23, 25 |
+| 61 | 53 | 3233 | 3120 | 7, 11, 17, 19, 23, 29, 31, 37 |
+| 101 | 103 | 10403 | 10200 | 7, 11, 13, 19, 23, 29, 31, 37 |
 
 ---
 
 ## Limitations
 
-- The CLI calls `main()` at module import time (`main()` is called at the bottom of `cli.py`). This means importing `cli` directly will trigger the interactive prompt.
+- See the [known issue](#known-issue-in-v010) above: the console script does not start in v0.1.0.
+- `cli.py` calls `main()` at module level (there is no `if __name__ == "__main__":` guard), so importing `npcryption.cli` starts the interactive prompt.
 - All inputs are read from stdin; there is no support for file input or command-line flags in v0.1.0.
-- Characters are encrypted individually via their ASCII code. Non-ASCII (Unicode) characters may produce unexpected results if their code point exceeds N.
-
+- Characters are encrypted individually via their code point. Any character whose code point is ≥ N (for example most non-ASCII characters with small keys) will not decrypt correctly.
