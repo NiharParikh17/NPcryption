@@ -1,5 +1,5 @@
-import Encryption
-import Decryption
+from npcryption.core import Encryption
+from npcryption.core import Decryption
 
 
 def encrypt(P, Q, E, message):
@@ -27,4 +27,5 @@ def main():
         print(decrypt(P, Q, E, message))
 
 
-main()
+if __name__ == "__main__":
+    main()
