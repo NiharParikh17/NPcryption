@@ -176,22 +176,26 @@ python -m build
 twine check --strict dist/*
 ```
 
-### `release.yml` — runs when a `v*` tag is pushed
+### `release.yml` — creates the tag and GitHub release
 
-1. Runs the full `ci.yml` workflow.
-2. Checks that the tag (without the leading `v`) equals the version in both `pyproject.toml` and `src/npcryption/__init__.py`.
+Runs when:
+
+- a push to `main` changes `pyproject.toml` or `src/npcryption/__init__.py` (for example, merging a version bump),
+- it is started manually on `main` from **Actions → Release → Run workflow**, or
+- a `v*` tag is pushed by hand.
+
+Steps:
+
+1. **Check version** — reads the version from `pyproject.toml`, fails if `npcryption.__version__` differs, and works out the tag `v<version>`. For a pushed tag, the tag must match. On `main`, nothing more happens if that tag or release already exists. Manual runs on any other branch fail.
+2. Runs the full `ci.yml` workflow.
 3. Builds the sdist and wheel and runs `twine check`.
-4. Creates a GitHub release for the tag with auto-generated notes and the built files attached.
+4. Creates the tag on the tested commit (unless it already exists) and a GitHub release with auto-generated notes and the built files attached.
+
+The release workflow does not publish to PyPI.
 
 ### Cutting a release
 
-1. Update `version` in `pyproject.toml` and `__version__` in `src/npcryption/__init__.py` (and `test_version_value` in `tests/test_package.py`).
-2. Merge the change to `main`.
-3. Tag and push:
+1. In a pull request, update `version` in `pyproject.toml` and `__version__` in `src/npcryption/__init__.py` (and `test_version_value` in `tests/test_package.py`).
+2. Merge it to `main`. The release workflow tags `v<version>` and publishes the release automatically.
 
-   ```bash
-   git tag v0.2.0
-   git push origin v0.2.0
-   ```
-
-The release workflow does not publish to PyPI.
+If the automatic run did not happen or failed, re-run it from the Actions tab or start it manually on `main`.

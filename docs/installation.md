@@ -113,5 +113,5 @@ pip install pytest flake8
 | `pyproject.toml` | Build system configuration, project metadata, entry points |
 | `setup.cfg` | pytest and flake8 tool configuration |
 | `.github/workflows/ci.yml` | CI: lint, test matrix and package build |
-| `.github/workflows/release.yml` | Release: publishes a GitHub release for `v*` tags |
+| `.github/workflows/release.yml` | Release: tags new versions and publishes a GitHub release |
 

@@ -14,7 +14,7 @@ NPcryption/
 ├── .github/
 │   └── workflows/
 │       ├── ci.yml           # Lint, test matrix and package build
-│       └── release.yml      # GitHub release on v* tags
+│       └── release.yml      # Tags and publishes a GitHub release
 ├── src/
 │   └── npcryption/          # Installable Python package
 │       ├── __init__.py      # Public API (encrypt / decrypt)
@@ -88,10 +88,11 @@ flake8 src/ tests/
 
 Every push to `main` and every pull request runs the
 [CI workflow](.github/workflows/ci.yml): flake8, pytest on Python 3.10–3.12,
-and a package build check. Pushing a `v*` tag runs the
-[release workflow](.github/workflows/release.yml), which publishes a GitHub
-release with the built sdist and wheel. See [Testing](docs/testing.md) for
-details.
+and a package build check. When a new version in `pyproject.toml` reaches
+`main`, the [release workflow](.github/workflows/release.yml) creates the
+`v<version>` tag and publishes a GitHub release with the built sdist and
+wheel; it can also be run manually. See [Testing](docs/testing.md#cutting-a-release)
+for details.
 
 ## Documentation
 

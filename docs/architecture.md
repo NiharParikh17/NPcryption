@@ -11,7 +11,7 @@ NPcryption/
 ├── .github/
 │   └── workflows/
 │       ├── ci.yml                 # Lint, test matrix (3.10–3.12) and package build
-│       └── release.yml            # Builds and publishes a GitHub release on v* tags
+│       └── release.yml            # Tags new versions and publishes a GitHub release
 ├── src/
 │   └── npcryption/                # Installable Python package
 │       ├── __init__.py            # Public API — re-exports encrypt() and decrypt()
