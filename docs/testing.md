@@ -158,7 +158,7 @@ Configured in `setup.cfg` with a max line length of 100. The codebase is current
 
 GitHub Actions workflows live in `.github/workflows/`.
 
-### `ci.yml` — runs on every push to `master`, every pull request, and on demand
+### `ci.yml` — runs on every push to `main`, every pull request, and on demand
 
 | Job | What it does |
 |---|---|
@@ -186,7 +186,7 @@ twine check --strict dist/*
 ### Cutting a release
 
 1. Update `version` in `pyproject.toml` and `__version__` in `src/npcryption/__init__.py` (and `test_version_value` in `tests/test_package.py`).
-2. Merge the change to `master`.
+2. Merge the change to `main`.
 3. Tag and push:
 
    ```bash

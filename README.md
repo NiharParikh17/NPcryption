@@ -1,6 +1,6 @@
 # NPcryption
 
-[![CI](https://github.com/NiharParikh17/NPcryption/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/NiharParikh17/NPcryption/actions/workflows/ci.yml)
+[![CI](https://github.com/NiharParikh17/NPcryption/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/NiharParikh17/NPcryption/actions/workflows/ci.yml)
 
 Encrypts and Decrypts user input using RSA cryptography.
 
@@ -86,7 +86,7 @@ pytest -v
 flake8 src/ tests/
 ```
 
-Every push to `master` and every pull request runs the
+Every push to `main` and every pull request runs the
 [CI workflow](.github/workflows/ci.yml): flake8, pytest on Python 3.10–3.12,
 and a package build check. Pushing a `v*` tag runs the
 [release workflow](.github/workflows/release.yml), which publishes a GitHub

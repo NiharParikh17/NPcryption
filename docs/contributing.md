@@ -67,7 +67,7 @@ flake8 src/ tests/
    ```bash
    git commit -m "feat: add padding validation for encrypt()"
    ```
-4. **Push** and open a **Pull Request** against the `master` branch.
+4. **Push** and open a **Pull Request** against the `main` branch.
 5. Wait for the **CI** checks (lint, tests on Python 3.10–3.12, package build) to pass. See [Testing](testing.md#continuous-integration) for what runs.
 
 ---
