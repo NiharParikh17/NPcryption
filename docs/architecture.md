@@ -12,6 +12,7 @@ NPcryption/
 │   ├── ISSUE_TEMPLATE/            # Bug report and feature request forms
 │   └── workflows/
 │       ├── ci.yml                 # Lint, test matrix (3.10–3.12) and package build
+│       ├── pages.yml              # Publishes web/ to GitHub Pages
 │       └── release.yml            # Tags new versions and publishes a GitHub release
 ├── src/
 │   └── npcryption/                # Installable Python package
@@ -36,6 +37,8 @@ NPcryption/
 │   ├── test_cli.py                # cli wrappers and main()
 │   └── test_integration.py        # encrypt ↔ decrypt round-trips
 ├── docs/                          # This documentation
+├── web/
+│   └── index.html                 # Project website, published by pages.yml
 ├── LICENSE                        # MIT License
 ├── README.md                      # Quick-start readme
 ├── pyproject.toml                 # Build metadata and entry points
