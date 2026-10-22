@@ -77,7 +77,7 @@ flake8 src/ tests/
 - **CLI improvements** — Accept command-line arguments (e.g. argparse), support file I/O, reject an invalid E/D choice before asking for keys.
 - **Padding scheme** — Implement PKCS#1 v1.5 or OAEP padding for educational parity with real-world RSA.
 - **Key validation** — Validate that P and Q are prime, that E is coprime with φ(N), and that N exceeds every character code at call time.
-- **Packaging** — Move `project.license` to an SPDX string (`license = "MIT"`) before setuptools drops the table form on 2027-02-18; consider publishing to PyPI from the release workflow.
+- **Packaging** — Consider publishing to PyPI from the release workflow.
 - **Tests** — Extend coverage, e.g. for invalid keys and non-ASCII input.
 - **Documentation** — Improve or expand any doc page.
 
