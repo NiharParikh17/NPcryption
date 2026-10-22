@@ -55,8 +55,8 @@ Encrypts a plaintext string using RSA.
 ```python
 from npcryption import encrypt
 
-cipher = encrypt(3, 11, 7, "Hi")
-# Returns a string of numeric blocks, e.g. "3203"
+cipher = encrypt(17, 19, 5, "Hi")
+# "021022"  (N = 323, so each block is 3 digits: 'H' → "021", 'i' → "022")
 ```
 
 **Notes**
@@ -64,6 +64,8 @@ cipher = encrypt(3, 11, 7, "Hi")
 - An internal dictionary caches already-encrypted characters to avoid redundant computation.
 - `N = P * Q` is computed once and reused for all characters.
 - The `EncryptionTable` is instantiated once with exponent `E` and reused per character.
+- Every character's code point must be **less than `N`**. Larger values are silently reduced modulo `N` and will not decrypt back to the original character. `N ≥ 127` covers all printable ASCII.
+- The keys are not validated: if `P`/`Q` are not prime or `E` is not coprime with `(P-1)*(Q-1)`, a ciphertext is still returned but it will not round-trip.
 
 ---
 
@@ -86,7 +88,7 @@ Encrypts a single character using modular exponentiation.
 1. Get `M = ord(character)`.
 2. Seed the table: `prevSQR[0] = M`, `modNum[0] = M % PQ`.
 3. For each subsequent row: `prevSQR[k] = modNum[k-1]^2`, `modNum[k] = prevSQR[k] % PQ`.
-4. `C = getProduct() % PQ`.
+4. `C = powers.get_product() % PQ`.
 5. Left-pad `C` with `'0'` until `len(str(C)) == len(str(PQ))`.
 
 ---
@@ -99,7 +101,7 @@ Returns the Unicode code point (ASCII value) of a character via `ord()`.
 
 ### `getCharacter(ascii) → str`
 
-Returns the character corresponding to a Unicode code point via `chr()`.
+Returns the character corresponding to a Unicode code point via `chr()`. Defined for symmetry with `Decryption.py`; `encrypt()` does not use it.
 
 ---
 
@@ -131,13 +133,14 @@ Decrypts an NPcryption ciphertext string back to plaintext.
 - `N = P * Q` is computed and used to determine block width: `CharLength = len(str(PQ))`.
 - Private exponent `D` is derived automatically via `DecryptionTable((P-1)*(Q-1), E)`.
 - An internal dictionary caches already-decrypted blocks.
+- `message` must contain only digits. Any other character makes `int()` raise `ValueError`.
 
 **Example**
 ```python
 from npcryption import decrypt
 
-plain = decrypt(3, 11, 7, "3203")
-# Returns "Hi"
+plain = decrypt(17, 19, 5, "021022")
+# "Hi"
 ```
 
 ---
@@ -161,7 +164,7 @@ Decrypts a single ciphertext integer using modular exponentiation with the priva
 
 ### `getAscii(character) → int`
 
-Same as in `Encryption.py` — returns `ord(character)`.
+Same as in `Encryption.py`: returns `ord(character)`. `decrypt()` does not use it.
 
 ---
 
@@ -196,33 +199,35 @@ Initializes the table for exponent `n`.
 
 #### `initialize(self, n: int) → None`
 
-Populates all four lists. Calls `splitIntoValidPowersOf2(n)` and `getHighestPowerOf2(n)` to determine row count and validity.
+Populates all four lists. Calls `split_into_valid_powers_of_2(n)` and `get_highest_power_of_2(n)` to determine row count and validity.
 
 **Starting power:**
 - `1` if `n` is odd
 - `2` if `n` is even
 
-#### `setPrevSQR(self, value: int, index: int) → None`
+> **Note:** The callers always seed row 0 with `M¹`, so the table only gives the correct result for **odd** exponents. In valid RSA keys both `E` and `D` are always odd (φ(N) is even), so this path is not hit in normal use. For example, `EncryptionTable(6)` has `power == [2, 4]` and computes `M³` rather than `M⁶`.
+
+#### `set_prev_sqr(self, value: int, index: int) → None`
 
 Sets `self.prevSQR[index] = value`.
 
-#### `setModNum(self, value: int, index: int) → None`
+#### `set_mod_num(self, value: int, index: int) → None`
 
 Sets `self.modNum[index] = value`.
 
-#### `getProduct(self) → int`
+#### `get_product(self) → int`
 
-Returns the product of `modNum[k]` for all `k` where `validity[k] is True`.
+Returns the product of `modNum[k]` for all `k` where `validity[k] is True`. The product is **not** reduced modulo `N`; callers apply `% PQ` to the result.
 
 ```python
 product = 1
-for k in range(len(self.power)):
-    if self.validity[k]:
-        product *= self.modNum[k]
+for index in range(0, len(self.power)):
+    if self.validity[index]:
+        product *= self.modNum[index]
 return product
 ```
 
-#### `getLength(self) → int`
+#### `get_length(self) → int`
 
 Returns the number of rows in the table (= number of squaring iterations needed).
 
@@ -230,22 +235,22 @@ Returns the number of rows in the table (= number of squaring iterations needed)
 
 ### Module-level functions
 
-#### `splitIntoValidPowersOf2(n: int) → list[int]`
+#### `split_into_valid_powers_of_2(n: int) → list[int]`
 
 Returns the list of powers of 2 whose sum equals `n` (the set bits of `n`).
 
 ```python
-splitIntoValidPowersOf2(7)  # → [1, 2, 4]
-splitIntoValidPowersOf2(6)  # → [2, 4]
+split_into_valid_powers_of_2(7)  # → [1, 2, 4]
+split_into_valid_powers_of_2(6)  # → [2, 4]
 ```
 
-#### `getHighestPowerOf2(n: int) → int`
+#### `get_highest_power_of_2(n: int) → int`
 
-Returns `2^⌊log₂(n)⌋` — the largest power of 2 that is ≤ n.
+Returns `2^⌊log₂(n)⌋` — the largest power of 2 that is ≤ n. Uses `math.log`, so `n` must be positive.
 
 ```python
-getHighestPowerOf2(7)  # → 4
-getHighestPowerOf2(8)  # → 8
+get_highest_power_of_2(7)  # → 4
+get_highest_power_of_2(8)  # → 8
 ```
 
 ---
@@ -274,9 +279,11 @@ Subclass of `EncryptionTable`.
 1. Calls `DecryptionTable.getD(PQ, E)` to compute `D`.
 2. Calls `super().__init__(D)` — initializes the squaring table for exponent `D`.
 
-#### `getD(P_Q: int, E: int) → int` *(static method)*
+#### `getD(P_Q: int, E: int) → int`
 
 Instantiates `DTable(P_Q, E)`, calls `generateTable()`, and returns `dtable.getD(P_Q)`.
+
+Defined without `@staticmethod`, so it must be called on the class (`DecryptionTable.getD(phi, E)`), as `__init__` does. Calling it on an instance binds the instance to `P_Q` and raises `TypeError`.
 
 ---
 
@@ -321,17 +328,28 @@ X[i] = X[i-2] - X[i-1] * Q[i]
 D[i] = D[i-2] - D[i-1] * Q[i]
 ```
 
-Continues while the latest remainder is neither `1` nor `0`.
+Continues while the latest remainder is neither `1` nor `0`. A final remainder of `0` means `gcd(φN, E) ≠ 1` (an invalid `E`); no error is raised in that case.
+
+Calling it a second time appends a duplicate copy of the rows to each list (the value returned by `getD()` is unchanged).
 
 #### `getD(self, PQ: int) → int`
 
 Returns the last computed `D` value. If `D < 0`, adds `PQ` to ensure a positive result.
 
 ```python
-D = self.D[-1]
+D = (self.D[len(self.D) - 1])
 if D < 0:
     D = D + PQ
 return D
+```
+
+**Example**
+```python
+from npcryption.core.DTable import DTable
+
+dt = DTable(288, 5)    # φ(N) for P=17, Q=19; E=5
+dt.generateTable()
+dt.getD(288)           # → 173   (5 × 173 = 865 = 3 × 288 + 1)
 ```
 
 ---
@@ -341,6 +359,10 @@ return D
 **File:** `src/npcryption/cli.py`
 
 Interactive command-line interface.
+
+> **Known issue (v0.1.0):** `cli.py` uses bare imports (`import Encryption`, `import Decryption`) that do not resolve inside the installed package, so importing `npcryption.cli` raises `ModuleNotFoundError: No module named 'Encryption'`. This also breaks the `npcryption` console script. See the [CLI Guide](cli.md#known-issue-in-v010) for a workaround.
+>
+> The module also calls `main()` at import time (there is no `if __name__ == "__main__":` guard).
 
 ---
 
@@ -367,5 +389,5 @@ Enter Message:          ← (encryption only)
 Encrypted Message:      ← (decryption only)
 ```
 
-Prints the encrypted or decrypted result to stdout.
+Prints the encrypted or decrypted result to stdout. `P`, `Q` and `E` are read before the choice is checked; any choice other than `E`/`e`/`D`/`d` prints nothing.
 
