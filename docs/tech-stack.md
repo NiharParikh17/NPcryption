@@ -95,7 +95,8 @@ After installation, running `npcryption` in any terminal calls `cli.main()`.
 | **flake8** | `setup.cfg` → `[flake8]` | PEP 8 style linting, max line length 100 |
 | **build** | — | Builds the sdist and wheel (`python -m build`) |
 | **twine** | — | Validates distribution metadata (`twine check --strict`) |
-| **GitHub Actions** | `.github/workflows/` | CI (lint, tests, build) and automatic tagging and releases |
+| **GitHub Actions** | `.github/workflows/` | CI (lint, tests, build), automatic tagging and releases, and the website |
+| **Pyodide** | `web/index.html` | Runs the npcryption wheel in the browser for the interactive demo (loaded from jsDelivr, not a project dependency) |
 
 ### pytest configuration
 
