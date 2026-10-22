@@ -12,6 +12,7 @@ third-party runtime dependencies. It is **not** intended to protect real data.
 ```
 NPcryption/
 ├── .github/
+│   ├── ISSUE_TEMPLATE/      # Bug report and feature request forms
 │   └── workflows/
 │       ├── ci.yml           # Lint, test matrix and package build
 │       └── release.yml      # Tags and publishes a GitHub release
@@ -37,11 +38,15 @@ NPcryption/
 
 ## Installation
 
-Requires Python 3.10 or newer.
+Requires Python 3.10 or newer. NPcryption is not on PyPI; install it from GitHub:
 
 ```bash
-pip install -e .
+pip install "git+https://github.com/NiharParikh17/NPcryption.git"
 ```
+
+Add `@v0.1.0` (or any tag from [Releases](https://github.com/NiharParikh17/NPcryption/releases))
+to the URL to pin a release; each release also has a wheel you can install directly. See
+[Installation & Setup](docs/installation.md) for details.
 
 ## Usage
 
@@ -99,6 +104,16 @@ for details.
 Full documentation lives in [`docs/`](docs/index.md): overview, architecture,
 algorithm walkthrough, API reference, CLI guide, installation, testing and
 contributing.
+
+## Contributing
+
+Contributions are welcome. The [contributing guide](docs/contributing.md) covers setup,
+code style and the pull request process; for larger changes, please open an issue first.
+
+## Reporting issues
+
+Found a bug or have an idea? [Open an issue](https://github.com/NiharParikh17/NPcryption/issues/new/choose)
+and pick **Bug report** or **Feature request**.
 
 ## License
 

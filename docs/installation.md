@@ -13,6 +13,24 @@ No third-party runtime packages are required.
 
 ---
 
+## Install from GitHub
+
+NPcryption is not published on PyPI. Install the latest code from `main`:
+
+```bash
+pip install "git+https://github.com/NiharParikh17/NPcryption.git"
+```
+
+or pin a release tag:
+
+```bash
+pip install "git+https://github.com/NiharParikh17/NPcryption.git@v0.1.0"
+```
+
+Each [GitHub release](https://github.com/NiharParikh17/NPcryption/releases) also has a wheel (`.whl`) attached, which can be installed directly with `pip install <wheel URL or file>`.
+
+---
+
 ## Install from Source (Development Mode)
 
 Clone the repository and install in editable mode:

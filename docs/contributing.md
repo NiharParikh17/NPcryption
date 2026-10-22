@@ -70,6 +70,8 @@ flake8 src/ tests/
 4. **Push** and open a **Pull Request** against the `main` branch.
 5. Wait for the **CI** checks (lint, tests on Python 3.10–3.12, package build) to pass. See [Testing](testing.md#continuous-integration) for what runs.
 
+Please **don't change the version number** in a pull request. The maintainer bumps it when cutting a release, because merging a version change to `main` publishes a release automatically (see [Cutting a release](testing.md#cutting-a-release)).
+
 ---
 
 ## Areas for Contribution
@@ -85,9 +87,10 @@ flake8 src/ tests/
 
 ## Reporting Issues
 
-Open a GitHub Issue and include:
-- Python version (`python --version`)
-- Operating system
-- Steps to reproduce
-- Expected vs. actual behaviour
+[Open a new issue](https://github.com/NiharParikh17/NPcryption/issues/new/choose) and choose a form:
+
+- **Bug report**: asks for the steps to reproduce (including P, Q, E and the message), expected vs. actual behaviour, and the NPcryption, Python and OS versions.
+- **Feature request**: asks for the problem and the proposed solution.
+
+The forms live in `.github/ISSUE_TEMPLATE/`. A blank issue is still available for anything else.
 
