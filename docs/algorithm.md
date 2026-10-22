@@ -27,6 +27,17 @@ In NPcryption both parties supply P, Q, and E directly — so the "asymmetry" is
 | `E` | Public exponent | Must be coprime with φ(N) and `1 < E < φ(N)` |
 | `D` | Private exponent | Modular inverse of E mod φ(N): `E × D ≡ 1 (mod φ(N))` |
 
+### Choosing N large enough
+
+Each character is encrypted as its own number `M = ord(character)`, and RSA only recovers values in the range `0 … N−1`. Every character in the message must therefore satisfy **`ord(character) < N`**:
+
+| Character set | Minimum N | Example keys |
+|---|---|---|
+| Printable ASCII (32–126) | 127 | `P=11, Q=13` (N=143), `P=17, Q=19` (N=323) |
+| Latin-1 (up to 255) | 256 | `P=17, Q=19` (N=323), `P=61, Q=53` (N=3233) |
+
+If `ord(character) ≥ N`, the character is silently reduced modulo N and decrypts to a different character. NPcryption does not check this, nor does it check that P and Q are prime or that E is coprime with φ(N).
+
 ---
 
 ## Encryption
@@ -42,21 +53,23 @@ The final ciphertext is the concatenation of all padded blocks.
 ### Example
 
 ```
-P = 3, Q = 11  →  N = 33,  φ(N) = 20
-E = 7
+P = 17, Q = 19  →  N = 323,  φ(N) = 288
+E = 5
 
-Character 'A'  →  M = 65
-C = 65^7 mod 33
+Character 'H'  →  M = 72
+C = 72^5 mod 323
 
-Binary expansion of E = 7 = 4 + 2 + 1 = (111)₂
-  k=0: 65^1  mod 33 = 65 mod 33 = 32       (power 1 is valid)
-  k=1: 32^2  mod 33 = 1024 mod 33 = 1       (power 2 is valid)  
-  k=2: 1^2   mod 33 = 1 mod 33 = 1          (power 4 is valid)
-product = 32 × 1 × 1 = 32
-C = 32 mod 33 = 32
+Binary expansion of E = 5 = 4 + 1 = (101)₂
+  k=0: 72            mod 323 = 72      (power 1 is valid)
+  k=1: 72² = 5184    mod 323 = 16      (power 2 is not used)
+  k=2: 16² = 256     mod 323 = 256     (power 4 is valid)
+product = 72 × 256 = 18432
+C = 18432 mod 323 = 21
 
-Padded to len("33")=2 digits → "32"
+Padded to len("323") = 3 digits → "021"
 ```
+
+So `encrypt(17, 19, 5, "H") == "021"`, and `encrypt(17, 19, 5, "Hello") == "021271109109042"`.
 
 ---
 
@@ -72,11 +85,22 @@ For each fixed-width block in the ciphertext:
 ### Example (continuing from above)
 
 ```
-D such that 7D ≡ 1 (mod 20)  →  D = 3
+D such that 5D ≡ 1 (mod 288)  →  D = 173      (5 × 173 = 865 = 3 × 288 + 1)
 
-C = 32
-M = 32^3 mod 33 = 32768 mod 33 = 65
-chr(65) = 'A'  ✓
+C = 21
+D = 173 = 128 + 32 + 8 + 4 + 1 = (10101101)₂
+
+  k=0: 21                    mod 323 = 21     (power 1 is valid)
+  k=1: 21²  = 441            mod 323 = 118
+  k=2: 118² = 13924          mod 323 = 35     (power 4 is valid)
+  k=3: 35²  = 1225           mod 323 = 256    (power 8 is valid)
+  k=4: 256² = 65536          mod 323 = 290
+  k=5: 290² = 84100          mod 323 = 120    (power 32 is valid)
+  k=6: 120² = 14400          mod 323 = 188
+  k=7: 188² = 35344          mod 323 = 137    (power 128 is valid)
+product = 21 × 35 × 256 × 120 × 137 = 3093350400
+M = 3093350400 mod 323 = 72
+chr(72) = 'H'  ✓
 ```
 
 ---
@@ -103,23 +127,27 @@ Given base `M`, exponent `E`, modulus `N`:
    M^E mod N = (product of selected modNums) mod N
    ```
 
+NPcryption multiplies all of the selected rows together first and reduces modulo N once at the end, rather than after each multiplication. Python's arbitrary-precision integers keep this correct; the intermediate product just gets larger.
+
 ### Implementation: `EncryptionTable`
 
 `EncryptionTable(n)` builds this table for exponent `n`:
 
-- **`splitIntoValidPowersOf2(n)`** — returns the powers of 2 whose sum equals `n` (i.e., the set bits).
-- **`getHighestPowerOf2(n)`** — returns `2^⌊log₂(n)⌋`, the highest power needed.
+- **`split_into_valid_powers_of_2(n)`** — returns the powers of 2 whose sum equals `n` (i.e., the set bits).
+- **`get_highest_power_of_2(n)`** — returns `2^⌊log₂(n)⌋`, the highest power needed.
 - `initialize(n)` — populates `self.power`, `self.prevSQR`, `self.modNum`, and `self.validity` arrays.
-- `setPrevSQR(value, k)` / `setModNum(value, k)` — filled in by the calling encryption/decryption function during the squaring loop.
-- `getProduct()` — multiplies `modNum[k]` for every row `k` where `validity[k] == True`.
-- `getLength()` — returns the number of rows (= number of squarings needed).
+- `set_prev_sqr(value, k)` / `set_mod_num(value, k)` — filled in by the calling encryption/decryption function during the squaring loop.
+- `get_product()` — multiplies `modNum[k]` for every row `k` where `validity[k] == True`.
+- `get_length()` — returns the number of rows (= number of squarings needed).
 
 ```python
-# Conceptual example: E = 7 = (111)₂
-# powers = [1, 2, 4], all valid
-# validity = [True, True, True]
-# getProduct() = modNum[0] * modNum[1] * modNum[2]
+# Conceptual example: E = 5 = (101)₂
+# power    = [1, 2, 4]
+# validity = [True, False, True]
+# get_product() = modNum[0] * modNum[2]
 ```
+
+> **Odd exponents only.** For an even `n` the table starts at power 2 instead of 1, but the callers still seed row 0 with `M¹`, so the result is wrong (e.g. `n = 6` yields `M³`). This never matters for valid RSA keys: φ(N) is even, so both `E` and `D` are always odd.
 
 ---
 
@@ -144,16 +172,28 @@ This is equivalent to finding the **modular inverse** of `E` in `ℤ_{φ(N)}`. T
 | `X` | `[1, 0, …]` | `X[i] = X[i-2] − X[i-1] × Q[i]` |
 | `D` | `[0, 1, …]` | `D[i] = D[i-2] − D[i-1] × Q[i]` |
 
-`generateTable()` continues until `R[i]` reaches `1` or `0`.
+`generateTable()` continues until `R[i]` reaches `1` or `0`. Reaching `0` means `E` was not coprime with φ(N); the resulting `D` is meaningless but no error is raised.
 
 `getD(φN)` returns the last `D` value, adjusting it to be positive (by adding `φN` if negative).
+
+#### Worked example: `DTable(288, 5)`
+
+| i | R | Q | X | D |
+|---|---|---|---|---|
+| 0 | 288 | 0 | 1 | 0 |
+| 1 | 5 | 0 | 0 | 1 |
+| 2 | 3 | 57 | 1 | −57 |
+| 3 | 2 | 1 | −1 | 58 |
+| 4 | 1 | 1 | 2 | −115 |
+
+The remainder reaches 1 at row 4, so `D = −115 + 288 = 173`. Check: `288 × 2 + 5 × (−115) = 1`.
 
 ### `DecryptionTable`
 
 `DecryptionTable` is a subclass of `EncryptionTable`:
-1. Instantiates `DTable(φN, E)` and calls `generateTable()`.
+1. Calls `DecryptionTable.getD(φN, E)`, which instantiates `DTable(φN, E)` and calls `generateTable()`.
 2. Extracts `D = dtable.getD(φN)`.
-3. Calls `EncryptionTable.__init__(D)` — so the same square-and-multiply machinery operates with exponent `D` instead of `E`.
+3. Calls `super().__init__(D)` — so the same square-and-multiply machinery operates with exponent `D` instead of `E`.
 
 ---
 
