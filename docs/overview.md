@@ -20,6 +20,7 @@ It is designed as an educational implementation of RSA that exposes the underlyi
 
 - **Not production-safe cryptography.** NPcryption is an educational implementation. It does not use cryptographically secure random number generation, padding schemes (e.g. OAEP), or side-channel protections. Do **not** use it to protect sensitive real-world data.
 - **Not an asymmetric-key exchange system.** Both parties must know P, Q, and E. Key distribution is left entirely to the user.
+- **Not a block cipher.** Each character is encrypted on its own, so the same character always produces the same block (`"aa"` → two identical blocks). The modulus `N = P × Q` must also exceed every character code in the message; see [Choosing N large enough](algorithm.md#choosing-n-large-enough).
 
 ---
 
@@ -53,5 +54,5 @@ Both the encryption and decryption exponentiation steps use the **square-and-mul
 
 | Version | Status | Notes |
 |---|---|---|
-| 0.1.0 | Alpha | Initial release — core RSA encrypt/decrypt + CLI |
+| 0.1.0 | Alpha | Initial release — core RSA encrypt/decrypt + CLI (the CLI entry point has a [known import issue](cli.md#known-issue-in-v010)) |
 

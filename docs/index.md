@@ -13,7 +13,7 @@ Welcome to the official documentation for **NPcryption** — an RSA-based encryp
 | [API Reference](api-reference.md) | Full reference for every module, class, and function |
 | [CLI Guide](cli.md) | Using the interactive command-line interface |
 | [Installation & Setup](installation.md) | How to install and run the project |
-| [Testing](testing.md) | How to run and write tests |
+| [Testing](testing.md) | How to run and write tests; CI and release workflows |
 | [Contributing](contributing.md) | Code style, workflow, and contribution guidelines |
 
 ---
