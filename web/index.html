@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NPcryption</title>
+  <meta name="description" content="NPcryption is an educational, pure-Python RSA encryption and decryption library with an interactive CLI.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='6' y='14' width='20' height='14' rx='3' fill='%232f6feb'/%3E%3Cpath d='M11 14v-4a5 5 0 0 1 10 0v4' fill='none' stroke='%232f6feb' stroke-width='3'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg: #f6f8fa;
+      --card: #ffffff;
+      --text: #1f2328;
+      --muted: #59636e;
+      --border: #d1d9e0;
+      --accent: #2f6feb;
+      --code-bg: #eff2f5;
+      --warn-bg: #fff8c5;
+      --warn-border: #d4a72c;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d1117;
+        --card: #151b23;
+        --text: #e6edf3;
+        --muted: #9198a1;
+        --border: #3d444d;
+        --accent: #4493f8;
+        --code-bg: #212830;
+        --warn-bg: #2e2a14;
+        --warn-border: #9e6a03;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 48px 16px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+    }
+    h1 { margin: 0 0 4px; font-size: 2rem; }
+    h2 { margin: 32px 0 8px; font-size: 1.15rem; }
+    .tagline { margin: 0; color: var(--muted); }
+    .notice {
+      margin: 24px 0 0;
+      padding: 12px 16px;
+      background: var(--warn-bg);
+      border: 1px solid var(--warn-border);
+      border-radius: 8px;
+    }
+    pre {
+      margin: 0 0 12px;
+      padding: 12px 16px;
+      background: var(--code-bg);
+      border-radius: 8px;
+      overflow-x: auto;
+      font: 0.9rem/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    ul.links { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+    a { color: var(--accent); }
+    footer { margin-top: 24px; text-align: center; color: var(--muted); font-size: 0.875rem; }
+    @media (max-width: 480px) {
+      main { padding: 24px 16px; }
+      .card { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="card">
+      <h1>NPcryption</h1>
+      <p class="tagline">An educational, pure-Python RSA encryption and decryption library with an interactive CLI.</p>
+
+      <p class="notice"><strong>Coming soon:</strong> an interactive demo that runs NPcryption in your browser and shows each step of key setup, encryption and decryption.</p>
+
+      <h2>What it shows</h2>
+      <p>How RSA works under the hood: square-and-multiply modular exponentiation, and deriving the private key with the Extended Euclidean Algorithm. It has no third-party dependencies and is meant for learning, not for protecting real data.</p>
+
+      <h2>Try it</h2>
+      <pre><code>pip install "git+https://github.com/NiharParikh17/NPcryption.git"</code></pre>
+      <pre><code>&gt;&gt;&gt; from npcryption import encrypt, decrypt
+&gt;&gt;&gt; encrypt(17, 19, 5, "Hello")
+'021271109109042'
+&gt;&gt;&gt; decrypt(17, 19, 5, "021271109109042")
+'Hello'</code></pre>
+
+      <h2>Links</h2>
+      <ul class="links">
+        <li><a href="https://github.com/NiharParikh17/NPcryption">Source code on GitHub</a></li>
+        <li><a href="https://github.com/NiharParikh17/NPcryption/tree/main/docs">Documentation</a></li>
+        <li><a href="https://github.com/NiharParikh17/NPcryption/releases">Releases</a></li>
+        <li><a href="https://github.com/NiharParikh17/NPcryption/issues/new/choose">Report an issue or suggest a feature</a></li>
+      </ul>
+    </div>
+    <footer>MIT License &middot; Educational use only</footer>
+  </main>
+</body>
+</html>
