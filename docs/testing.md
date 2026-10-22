@@ -53,7 +53,7 @@ pytest tests/test_encryption.py
 | `test_encryption_table.py` | `split_into_valid_powers_of_2`, `get_highest_power_of_2`, `EncryptionTable` init, length and setters |
 | `test_decryption_table.py` | `DecryptionTable` inheritance, derived `D`, and `getD` |
 | `test_dtable.py` | `DTable` initial state, `generateTable()` and `getD()` |
-| `test_cli.py` | `cli.encrypt` / `cli.decrypt` wrappers and `cli.main()` prompts and output |
+| `test_cli.py` | Side-effect-free import, `cli.encrypt` / `cli.decrypt` wrappers, `cli.main()` prompts and output, and `python -m npcryption.cli` |
 | `test_integration.py` | End-to-end `encrypt` → `decrypt` round-trips across several key sets, including every printable ASCII character |
 
 The reference key sets used throughout are:
@@ -66,15 +66,11 @@ The reference key sets used throughout are:
 
 `test_integration.py` also uses two small-N key sets (`N = 91` and `N = 55`) with messages restricted to characters whose code point is below N. One parametrised case is **expected to be skipped** (`N=55 too small for 'A'`).
 
-### How `test_cli.py` works around the CLI
+### How `test_cli.py` tests the CLI
 
-`cli.py` cannot be imported normally (see the [CLI Guide](cli.md#known-issue-in-v010)), so the CLI tests:
-
-1. Register `npcryption.core.Encryption` and `npcryption.core.Decryption` in `sys.modules` as `Encryption` and `Decryption`, so the bare imports resolve.
-2. Patch `builtins.input` before importing `npcryption.cli`, because the module calls `main()` at import time.
-3. Remove `npcryption.cli` from `sys.modules` before each import so every test gets a fresh module.
-
-When `cli.py` is fixed these workarounds can be removed.
+- `cli.main()` is called with `builtins.input` patched to feed the answers, and `capsys` captures what it prints.
+- `TestCliImport` checks that importing `npcryption.cli` never calls `input()`.
+- `TestCliAsScript` runs `python -m npcryption.cli` in a subprocess (with `src/` on `PYTHONPATH`) to cover the real launch path end to end.
 
 ---
 
@@ -168,7 +164,7 @@ GitHub Actions workflows live in `.github/workflows/`.
 |---|---|
 | **Lint** | `flake8 src/ tests/` on Python 3.12 |
 | **Test** | `pip install -e . pytest` then `pytest -v` on Python 3.10, 3.11 and 3.12 |
-| **Build distribution** | Runs after Lint and Test pass: `python -m build`, `twine check --strict dist/*`, installs the wheel and performs a round-trip smoke test, then uploads `dist/` as the `dist` artifact |
+| **Build distribution** | Runs after Lint and Test pass: `python -m build`, `twine check --strict dist/*`, installs the wheel, performs a round-trip smoke test and pipes a sample session through the `npcryption` command, then uploads `dist/` as the `dist` artifact |
 
 To reproduce CI locally:
 

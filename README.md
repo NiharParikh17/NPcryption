@@ -66,13 +66,11 @@ Key requirements (none of them are validated by the library):
 ### CLI
 
 ```bash
-npcryption
+npcryption              # or: python -m npcryption.cli
 ```
 
-> **Known issue:** in v0.1.0 the CLI fails at start-up with
-> `ModuleNotFoundError: No module named 'Encryption'` because `cli.py` uses
-> bare imports. See the [CLI Guide](docs/cli.md#known-issue-in-v010) for a
-> workaround.
+The CLI prompts for the operation (E/D), the keys `P`, `Q`, `E` and the
+message, then prints the result. See the [CLI Guide](docs/cli.md).
 
 ## Algorithm
 

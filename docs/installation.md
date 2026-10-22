@@ -42,9 +42,7 @@ python -c "import npcryption; print(npcryption.__version__)"
 npcryption
 ```
 
-This invokes `npcryption.cli:main` as registered in `pyproject.toml`.
-
-> **Note:** In v0.1.0 this command fails with `ModuleNotFoundError: No module named 'Encryption'`. See the [CLI Guide](cli.md#known-issue-in-v010) for the cause and a workaround. The library API below is unaffected.
+This invokes `npcryption.cli:main` as registered in `pyproject.toml`. `python -m npcryption.cli` does the same. See the [CLI Guide](cli.md) for a walkthrough.
 
 ---
 
