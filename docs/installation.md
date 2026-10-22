@@ -132,4 +132,5 @@ pip install pytest flake8
 | `setup.cfg` | pytest and flake8 tool configuration |
 | `.github/workflows/ci.yml` | CI: lint, test matrix and package build |
 | `.github/workflows/release.yml` | Release: tags new versions and publishes a GitHub release |
+| `.github/workflows/pages.yml` | Website: publishes `web/` to GitHub Pages |
 

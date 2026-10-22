@@ -199,3 +199,9 @@ The release workflow does not publish to PyPI.
 2. Merge it to `main`. The release workflow tags `v<version>` and publishes the release automatically.
 
 If the automatic run did not happen or failed, re-run it from the Actions tab or start it manually on `main`.
+
+### `pages.yml` — publishes the website
+
+Runs when a push to `main` changes `web/` or the workflow itself, and on demand. It uploads `web/` as-is and deploys it to GitHub Pages at <https://niharparikh17.github.io/NPcryption/>. The repository's Pages source must be set to **GitHub Actions** (Settings → Pages).
+
+To serve the site from a custom domain such as `npcryption.nhparikh.com`, first add a DNS `CNAME` record pointing to `niharparikh17.github.io`, then enter the domain under Settings → Pages. Doing it in the other order makes the `github.io` address redirect to a domain that does not resolve yet. Keep links in `web/` relative so the site works at both addresses.
