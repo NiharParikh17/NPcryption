@@ -8,7 +8,6 @@ Covers:
   - decrypt() — including empty string, single block, multi-block,
     repeated blocks (caching), correct block parsing
 """
-import pytest
 from npcryption.core.Decryption import decrypt, decryptCharacter, getAscii, getCharacter
 from npcryption.core.DecryptionTable import DecryptionTable
 from npcryption.core.Encryption import encrypt
@@ -83,11 +82,10 @@ class TestDecryptCharacter:
         """For every letter A-Z, decryptCharacter should reverse encryptCharacter."""
         PQ = P17 * Q19
         phi = (P17 - 1) * (Q19 - 1)
-        enc_table = __import__('npcryption.core.EncryptionTable', fromlist=['EncryptionTable']).EncryptionTable
-        dec_table = self._make_table(phi, E5)
         from npcryption.core.Encryption import encryptCharacter
+        from npcryption.core.EncryptionTable import EncryptionTable
         for ch in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ':
-            et = enc_table(E5)
+            et = EncryptionTable(E5)
             cipher_str = encryptCharacter(PQ, ch, et)
             coded_int = int(cipher_str)
             dec_table2 = self._make_table(phi, E5)
@@ -183,4 +181,3 @@ class TestDecrypt:
         msg = 'The quick brown fox!'
         cipher = encrypt(P17, Q19, E5, msg)
         assert decrypt(P17, Q19, E5, cipher) == msg
-
