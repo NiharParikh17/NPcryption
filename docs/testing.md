@@ -225,3 +225,5 @@ To serve the site from a custom domain such as `npcryption.nhparikh.com`:
 4. Turn on **Enforce HTTPS** once GitHub has issued the certificate.
 
 GitHub recommends this order (domain in the repository settings before the `CNAME`) so nobody else can claim the subdomain in between. Avoid wildcard DNS records. Keep links in `web/` relative so the site works at both addresses.
+
+The link-preview tags in `web/index.html` (`og:*`, `twitter:card` and the canonical link) are the one exception: preview services need absolute URLs, so they name `https://npcryption.nhparikh.com/` and must be updated if the domain changes. LinkedIn caches previews; use its [Post Inspector](https://www.linkedin.com/post-inspector/) to refresh one after changing the image or text.

@@ -42,7 +42,8 @@ NPcryption/
 │   ├── index.html                 # Page structure and copy
 │   ├── styles.css                 # Light/dark themes and responsive layout
 │   ├── app.js                     # Starts Pyodide, handles input, renders each step
-│   └── demo.py                    # Runs inside Pyodide; returns the library's intermediate values
+│   ├── demo.py                    # Runs inside Pyodide; returns the library's intermediate values
+│   └── og-image.png               # Link-preview image (2400 × 1254) for LinkedIn, Slack, X, etc.
 ├── LICENSE                        # MIT License
 ├── README.md                      # Quick-start readme
 ├── pyproject.toml                 # Build metadata and entry points
