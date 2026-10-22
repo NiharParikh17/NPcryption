@@ -14,7 +14,9 @@ env:
   PIP_DISABLE_PIP_VERSION_CHECK: "1"
 
 concurrency:
-  group: ci-${{ github.ref }}
+  # github.workflow is the caller's name when run from release.yml, so a
+  # release's CI never cancels (or is cancelled by) the regular CI run.
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
