@@ -2,17 +2,23 @@ from .EncryptionTable import EncryptionTable
 
 
 def getAscii(character):
-    """Get the ascii value of the character"""
+    """Return the code point of a single character (`ord`)."""
     return ord(character)
 
 
 def getCharacter(ascii):
-    """Get the character of the ascii value"""
+    """Return the character for a code point (`chr`). Not used by `encrypt`."""
     return chr(ascii)
 
 
 def encrypt(P, Q, E, message):
-    """Encrypting the given message using P, Q, and E"""
+    """Encrypt `message` with the RSA key (P, Q, E) and return the ciphertext.
+
+    Each character becomes `ord(character) ** E % (P * Q)`, left-padded with
+    zeros to `len(str(P * Q))` digits, and the blocks are concatenated.
+    Every character's code point must be below P * Q for `decrypt` to recover
+    it. The key is not validated.
+    """
     encyptedDict = {}
     encrypted_message = ""
     PQ = P * Q
@@ -28,7 +34,11 @@ def encrypt(P, Q, E, message):
 
 
 def encryptCharacter(PQ, character, powers):
-    """Encrypting a single given character"""
+    """Encrypt one character and return its zero-padded cipher block.
+
+    `PQ` is the modulus N = P * Q and `powers` is an `EncryptionTable` for
+    exponent E; its rows are overwritten on every call.
+    """
     ascii = getAscii(character)
     k = 0
     powers.set_prev_sqr(ascii, k)
