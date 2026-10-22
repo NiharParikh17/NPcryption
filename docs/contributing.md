@@ -49,7 +49,7 @@ flake8 src/ tests/
 | **Method naming** | `EncryptionTable` uses snake_case (`get_product`, `set_mod_num`); the other core modules still use camelCase (`encryptCharacter`, `generateTable`, `getD`) |
 | **Test naming** | Test files: `test_*.py`; test classes: `Test*`; test functions: `test_*` |
 | **No external deps** | Runtime code must use only the Python standard library |
-| **Version string** | Keep `pyproject.toml` and `npcryption.__version__` in sync |
+| **Version string** | Lives only in `src/npcryption/__init__.py` (`__version__`); `pyproject.toml` reads it from there |
 
 ---
 

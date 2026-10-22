@@ -49,7 +49,7 @@ The `-e` flag installs the package in **editable** mode, meaning changes to sour
 
 ```bash
 python -c "import npcryption; print(npcryption.__version__)"
-# 0.1.0
+# prints the installed version, for example 0.1.0
 ```
 
 ---
@@ -89,7 +89,7 @@ pip install build
 python -m build
 ```
 
-Produces `dist/npcryption-0.1.0.tar.gz` and `dist/npcryption-0.1.0-py3-none-any.whl`.
+Produces `dist/npcryption-<version>.tar.gz` and `dist/npcryption-<version>-py3-none-any.whl`.
 
 ---
 

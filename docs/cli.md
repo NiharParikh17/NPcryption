@@ -133,5 +133,5 @@ All of these have N ≥ 127, so they work for any printable ASCII message.
 
 ## Limitations
 
-- All inputs are read from stdin; there is no support for file input or command-line flags in v0.1.0.
+- All inputs are read from stdin; there is no support for file input or command-line flags yet.
 - Characters are encrypted individually via their code point. Any character whose code point is ≥ N (for example most non-ASCII characters with small keys) will not decrypt correctly.

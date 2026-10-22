@@ -7,6 +7,10 @@ Covers:
   - Top-level encrypt() and decrypt() are importable and functional
   - Package metadata consistency
 """
+from importlib import metadata
+
+import pytest
+
 import npcryption
 from npcryption import encrypt, decrypt
 
@@ -20,8 +24,14 @@ class TestPackageVersion:
     def test_version_is_string(self):
         assert isinstance(npcryption.__version__, str)
 
-    def test_version_value(self):
-        assert npcryption.__version__ == '0.1.0'
+    def test_version_matches_package_metadata(self):
+        """pyproject.toml takes its version from __version__, so they must agree."""
+        try:
+            installed = metadata.version('npcryption')
+        except metadata.PackageNotFoundError:
+            pytest.skip('npcryption is not installed')
+        assert installed == npcryption.__version__, (
+            'Installed metadata is stale; reinstall with `pip install -e .`')
 
     def test_version_format(self):
         """Version should follow 'X.Y.Z' semver pattern."""

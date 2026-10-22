@@ -47,7 +47,7 @@ pytest tests/test_encryption.py
 
 | File | Covers |
 |---|---|
-| `test_package.py` | `npcryption.__version__`, `__all__`, and the re-exported `encrypt` / `decrypt` |
+| `test_package.py` | `npcryption.__version__` (and that the installed package metadata matches it), `__all__`, and the re-exported `encrypt` / `decrypt` |
 | `test_encryption.py` | `getAscii`, `getCharacter`, `encryptCharacter`, `encrypt` (known values, padding, caching) |
 | `test_decryption.py` | `getAscii`, `getCharacter`, `decryptCharacter`, `decrypt` (block parsing, caching) |
 | `test_encryption_table.py` | `split_into_valid_powers_of_2`, `get_highest_power_of_2`, `EncryptionTable` init, length and setters |
@@ -187,7 +187,7 @@ Runs when:
 
 Steps:
 
-1. **Check version** — reads the version from `pyproject.toml`, fails if `npcryption.__version__` differs, and works out the tag `v<version>`. For a pushed tag, the tag must match. On `main`, nothing more happens if that tag or release already exists. Manual runs on any other branch fail.
+1. **Check version** — reads `__version__` from `src/npcryption/__init__.py` (the only copy of the version) and works out the tag `v<version>`. For a pushed tag, the tag must match. On `main`, nothing more happens if that tag or release already exists. Manual runs on any other branch fail.
 2. Runs the full `ci.yml` workflow.
 3. Builds the sdist and wheel and runs `twine check`.
 4. Creates the tag on the tested commit (unless it already exists) and a GitHub release with auto-generated notes and the built files attached.
@@ -196,7 +196,7 @@ The release workflow does not publish to PyPI.
 
 ### Cutting a release
 
-1. In a pull request, update `version` in `pyproject.toml` and `__version__` in `src/npcryption/__init__.py` (and `test_version_value` in `tests/test_package.py`).
+1. In a pull request, change `__version__` in `src/npcryption/__init__.py`. That is the only place the version is written.
 2. Merge it to `main`. The release workflow tags `v<version>` and publishes the release automatically.
 
 If the automatic run did not happen or failed, re-run it from the Actions tab or start it manually on `main`.
