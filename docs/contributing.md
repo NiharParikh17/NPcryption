@@ -68,7 +68,7 @@ flake8 src/ tests/
    git commit -m "feat: add padding validation for encrypt()"
    ```
 4. **Push** and open a **Pull Request** against the `main` branch.
-5. Wait for the **CI** checks (lint, tests on Python 3.10–3.12, package build) to pass. See [Testing](testing.md#continuous-integration) for what runs.
+5. Wait for the **CI** checks (lint, tests on Python 3.10–3.14, package build) to pass. See [Testing](testing.md#continuous-integration) for what runs.
 
 Please **don't change the version number** in a pull request. The maintainer bumps it when cutting a release, because merging a version change to `main` publishes a release automatically (see [Cutting a release](testing.md#cutting-a-release)).
 

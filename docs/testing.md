@@ -164,7 +164,7 @@ GitHub Actions workflows live in `.github/workflows/`.
 | Job | What it does |
 |---|---|
 | **Lint** | `flake8 src/ tests/` on Python 3.12 |
-| **Test** | `pip install -e . pytest` then `pytest -v` on Python 3.10, 3.11 and 3.12 |
+| **Test** | `pip install -e . pytest` then `pytest -v` on Python 3.10, 3.11, 3.12, 3.13 and 3.14 |
 | **Build distribution** | Runs after Lint and Test pass: `python -m build`, `twine check --strict dist/*`, installs the wheel, performs a round-trip smoke test and pipes a sample session through the `npcryption` command, then uploads `dist/` as the `dist` artifact |
 
 To reproduce CI locally:

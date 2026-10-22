@@ -10,7 +10,7 @@ This document describes every language, runtime, framework, and tooling decision
 |---|---|
 | **Language** | Python |
 | **Minimum version** | Python 3.10 |
-| **Tested on** | Python 3.10, 3.11, 3.12 (CI matrix) |
+| **Tested on** | Python 3.10, 3.11, 3.12, 3.13, 3.14 (CI matrix) |
 
 Python was chosen for its readability and its suitability for expressing mathematical algorithms concisely. No external runtime is required.
 
@@ -133,6 +133,8 @@ Programming Language :: Python :: 3
 Programming Language :: Python :: 3.10
 Programming Language :: Python :: 3.11
 Programming Language :: Python :: 3.12
+Programming Language :: Python :: 3.13
+Programming Language :: Python :: 3.14
 Topic :: Security :: Cryptography
 ```
 
