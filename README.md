@@ -16,6 +16,7 @@ that runs this library (via Pyodide) and shows every step of key setup, encrypti
 NPcryption/
 ├── .github/
 │   ├── ISSUE_TEMPLATE/      # Bug report and feature request forms
+│   ├── dependabot.yml       # Monthly GitHub Actions version updates
 │   └── workflows/
 │       ├── ci.yml           # Lint, test matrix and package build
 │       ├── pages.yml        # Publishes web/ to GitHub Pages

@@ -157,7 +157,7 @@ Configured in `setup.cfg` with a max line length of 100. The codebase is current
 
 ## Continuous Integration
 
-GitHub Actions workflows live in `.github/workflows/`.
+GitHub Actions workflows live in `.github/workflows/`. Dependabot (`.github/dependabot.yml`) checks the actions they use once a month and opens a single grouped pull request when updates are available. The Pyodide version pinned in `web/index.html` is not covered and has to be updated by hand.
 
 ### `ci.yml` — runs on every push to `main`, every pull request, and on demand
 
