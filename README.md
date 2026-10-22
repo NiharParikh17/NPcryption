@@ -12,6 +12,7 @@ third-party runtime dependencies. It is **not** intended to protect real data.
 ```
 NPcryption/
 ├── .github/
+│   ├── ISSUE_TEMPLATE/      # Bug report and feature request forms
 │   └── workflows/
 │       ├── ci.yml           # Lint, test matrix and package build
 │       └── release.yml      # Tags and publishes a GitHub release
@@ -99,6 +100,11 @@ for details.
 Full documentation lives in [`docs/`](docs/index.md): overview, architecture,
 algorithm walkthrough, API reference, CLI guide, installation, testing and
 contributing.
+
+## Reporting issues
+
+Found a bug or have an idea? [Open an issue](https://github.com/NiharParikh17/NPcryption/issues/new/choose)
+and pick **Bug report** or **Feature request**.
 
 ## License
 
