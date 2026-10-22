@@ -1,0 +1,13 @@
+# Keeps the GitHub Actions used in .github/workflows/ up to date.
+# One grouped pull request per month at most. The Pyodide version in
+# web/index.html is not covered and has to be bumped by hand.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      github-actions:
+        patterns:
+          - "*"

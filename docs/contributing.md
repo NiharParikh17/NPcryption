@@ -49,7 +49,7 @@ flake8 src/ tests/
 | **Method naming** | `EncryptionTable` uses snake_case (`get_product`, `set_mod_num`); the other core modules still use camelCase (`encryptCharacter`, `generateTable`, `getD`) |
 | **Test naming** | Test files: `test_*.py`; test classes: `Test*`; test functions: `test_*` |
 | **No external deps** | Runtime code must use only the Python standard library |
-| **Version string** | Keep `pyproject.toml` and `npcryption.__version__` in sync |
+| **Version string** | Lives only in `src/npcryption/__init__.py` (`__version__`); `pyproject.toml` reads it from there |
 
 ---
 
@@ -68,7 +68,7 @@ flake8 src/ tests/
    git commit -m "feat: add padding validation for encrypt()"
    ```
 4. **Push** and open a **Pull Request** against the `main` branch.
-5. Wait for the **CI** checks (lint, tests on Python 3.10–3.12, package build) to pass. See [Testing](testing.md#continuous-integration) for what runs.
+5. Wait for the **CI** checks (lint, tests on Python 3.10–3.14, package build) to pass. See [Testing](testing.md#continuous-integration) for what runs.
 
 Please **don't change the version number** in a pull request. The maintainer bumps it when cutting a release, because merging a version change to `main` publishes a release automatically (see [Cutting a release](testing.md#cutting-a-release)).
 

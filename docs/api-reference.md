@@ -16,9 +16,9 @@ from npcryption import encrypt, decrypt
 
 ### `__version__`
 ```python
-__version__: str = "0.1.0"
+__version__: str = "0.1.0"  # for example
 ```
-Current package version string.
+The package version. This is the only place it is written: `pyproject.toml` reads it from here at build time, and the release workflow uses it to name the release tag.
 
 ### `__all__`
 ```python

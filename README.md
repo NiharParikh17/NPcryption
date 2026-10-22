@@ -16,6 +16,7 @@ that runs this library (via Pyodide) and shows every step of key setup, encrypti
 NPcryption/
 ├── .github/
 │   ├── ISSUE_TEMPLATE/      # Bug report and feature request forms
+│   ├── dependabot.yml       # Monthly GitHub Actions version updates
 │   └── workflows/
 │       ├── ci.yml           # Lint, test matrix and package build
 │       ├── pages.yml        # Publishes web/ to GitHub Pages
@@ -97,7 +98,7 @@ flake8 src/ tests/
 ```
 
 Every push to `main` and every pull request runs the
-[CI workflow](.github/workflows/ci.yml): flake8, pytest on Python 3.10–3.12,
+[CI workflow](.github/workflows/ci.yml): flake8, pytest on Python 3.10–3.14,
 and a package build check. When a new version in `pyproject.toml` reaches
 `main`, the [release workflow](.github/workflows/release.yml) creates the
 `v<version>` tag and publishes a GitHub release with the built sdist and

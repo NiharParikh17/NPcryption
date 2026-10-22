@@ -18,7 +18,7 @@ Welcome to the official documentation for **NPcryption** — an RSA-based encryp
 
 ---
 
-> **Version:** 0.1.0  
+> **Version:** see [Releases](https://github.com/NiharParikh17/NPcryption/releases)  
 > **License:** MIT  
 > **Python:** ≥ 3.10
 

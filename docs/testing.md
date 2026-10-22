@@ -47,7 +47,7 @@ pytest tests/test_encryption.py
 
 | File | Covers |
 |---|---|
-| `test_package.py` | `npcryption.__version__`, `__all__`, and the re-exported `encrypt` / `decrypt` |
+| `test_package.py` | `npcryption.__version__` (and that the installed package metadata matches it), `__all__`, and the re-exported `encrypt` / `decrypt` |
 | `test_encryption.py` | `getAscii`, `getCharacter`, `encryptCharacter`, `encrypt` (known values, padding, caching) |
 | `test_decryption.py` | `getAscii`, `getCharacter`, `decryptCharacter`, `decrypt` (block parsing, caching) |
 | `test_encryption_table.py` | `split_into_valid_powers_of_2`, `get_highest_power_of_2`, `EncryptionTable` init, length and setters |
@@ -157,14 +157,14 @@ Configured in `setup.cfg` with a max line length of 100. The codebase is current
 
 ## Continuous Integration
 
-GitHub Actions workflows live in `.github/workflows/`.
+GitHub Actions workflows live in `.github/workflows/`. Dependabot (`.github/dependabot.yml`) checks the actions they use once a month and opens a single grouped pull request when updates are available. The Pyodide version pinned in `web/index.html` is not covered and has to be updated by hand.
 
 ### `ci.yml` — runs on every push to `main`, every pull request, and on demand
 
 | Job | What it does |
 |---|---|
 | **Lint** | `flake8 src/ tests/` on Python 3.12 |
-| **Test** | `pip install -e . pytest` then `pytest -v` on Python 3.10, 3.11 and 3.12 |
+| **Test** | `pip install -e . pytest` then `pytest -v` on Python 3.10, 3.11, 3.12, 3.13 and 3.14 |
 | **Build distribution** | Runs after Lint and Test pass: `python -m build`, `twine check --strict dist/*`, installs the wheel, performs a round-trip smoke test and pipes a sample session through the `npcryption` command, then uploads `dist/` as the `dist` artifact |
 
 To reproduce CI locally:
@@ -187,7 +187,7 @@ Runs when:
 
 Steps:
 
-1. **Check version** — reads the version from `pyproject.toml`, fails if `npcryption.__version__` differs, and works out the tag `v<version>`. For a pushed tag, the tag must match. On `main`, nothing more happens if that tag or release already exists. Manual runs on any other branch fail.
+1. **Check version** — reads `__version__` from `src/npcryption/__init__.py` (the only copy of the version) and works out the tag `v<version>`. For a pushed tag, the tag must match. On `main`, nothing more happens if that tag or release already exists. Manual runs on any other branch fail.
 2. Runs the full `ci.yml` workflow.
 3. Builds the sdist and wheel and runs `twine check`.
 4. Creates the tag on the tested commit (unless it already exists) and a GitHub release with auto-generated notes and the built files attached.
@@ -196,7 +196,7 @@ The release workflow does not publish to PyPI.
 
 ### Cutting a release
 
-1. In a pull request, update `version` in `pyproject.toml` and `__version__` in `src/npcryption/__init__.py` (and `test_version_value` in `tests/test_package.py`).
+1. In a pull request, change `__version__` in `src/npcryption/__init__.py`. That is the only place the version is written.
 2. Merge it to `main`. The release workflow tags `v<version>` and publishes the release automatically.
 
 If the automatic run did not happen or failed, re-run it from the Actions tab or start it manually on `main`.

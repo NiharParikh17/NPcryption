@@ -10,7 +10,7 @@ This document describes every language, runtime, framework, and tooling decision
 |---|---|
 | **Language** | Python |
 | **Minimum version** | Python 3.10 |
-| **Tested on** | Python 3.10, 3.11, 3.12 (CI matrix) |
+| **Tested on** | Python 3.10, 3.11, 3.12, 3.13, 3.14 (CI matrix) |
 
 Python was chosen for its readability and its suitability for expressing mathematical algorithms concisely. No external runtime is required.
 
@@ -45,16 +45,19 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "npcryption"
-version = "0.1.0"
+dynamic = ["version"]
 license = "MIT"
 license-files = ["LICENSE"]
 requires-python = ">=3.10"
 keywords = ["rsa", "cryptography", "encryption", "decryption"]
+
+[tool.setuptools.dynamic]
+version = { attr = "npcryption.__version__" }
 ```
 
 The license is declared as an SPDX expression, so there is no `License ::` classifier.
 
-The package version is declared in two places, `pyproject.toml` and `src/npcryption/__init__.py`. The release workflow fails if they differ, and uses them to name the release tag (`v<version>`).
+The package version is written in one place only, `__version__` in `src/npcryption/__init__.py`. `pyproject.toml` declares it as dynamic and setuptools reads it from there at build time; the release workflow uses the same value to name the release tag (`v<version>`).
 
 ---
 
@@ -133,6 +136,8 @@ Programming Language :: Python :: 3
 Programming Language :: Python :: 3.10
 Programming Language :: Python :: 3.11
 Programming Language :: Python :: 3.12
+Programming Language :: Python :: 3.13
+Programming Language :: Python :: 3.14
 Topic :: Security :: Cryptography
 ```
 

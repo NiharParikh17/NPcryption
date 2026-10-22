@@ -10,8 +10,9 @@ This document describes the project's directory structure and explains how the m
 NPcryption/
 ├── .github/
 │   ├── ISSUE_TEMPLATE/            # Bug report and feature request forms
+│   ├── dependabot.yml             # Monthly GitHub Actions version updates
 │   └── workflows/
-│       ├── ci.yml                 # Lint, test matrix (3.10–3.12) and package build
+│       ├── ci.yml                 # Lint, test matrix (3.10–3.14) and package build
 │       ├── pages.yml              # Publishes web/ to GitHub Pages
 │       └── release.yml            # Tags new versions and publishes a GitHub release
 ├── src/
