@@ -1,0 +1,66 @@
+name: Bug report
+description: Something does not work as documented.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a problem. NPcryption is an educational RSA implementation:
+        please only share test keys and messages, never real secrets.
+  - type: checkboxes
+    id: keys
+    attributes:
+      label: Key requirements
+      description: >-
+        Many unexpected results come from keys that do not meet the
+        [key requirements](https://github.com/NiharParikh17/NPcryption/blob/main/docs/algorithm.md#choosing-n-large-enough).
+      options:
+        - label: P and Q are distinct primes, E is coprime with (P-1)*(Q-1), and P*Q is larger than every character code in the message.
+          required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Include the full error message or the wrong output.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: The code or CLI input that shows the problem, including P, Q, E and the message.
+      placeholder: |
+        from npcryption import encrypt, decrypt
+        cipher = encrypt(17, 19, 5, "Hello")
+        print(decrypt(17, 19, 5, cipher))
+      render: python
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: NPcryption version
+      description: 'Output of `python -c "import npcryption; print(npcryption.__version__)"`'
+      placeholder: 0.1.0
+    validations:
+      required: true
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+      description: Output of `python --version`
+      placeholder: 3.12.3
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: macOS 15, Ubuntu 24.04, Windows 11
