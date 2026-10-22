@@ -10,6 +10,9 @@ on:
 permissions:
   contents: read
 
+env:
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
