@@ -54,5 +54,5 @@ Both the encryption and decryption exponentiation steps use the **square-and-mul
 
 | Version | Status | Notes |
 |---|---|---|
-| 0.1.0 | Alpha | Initial release — core RSA encrypt/decrypt + CLI (the CLI entry point has a [known import issue](cli.md#known-issue-in-v010)) |
+| 0.1.0 | Alpha | Initial release — core RSA encrypt/decrypt + CLI |
 

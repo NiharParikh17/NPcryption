@@ -358,11 +358,7 @@ dt.getD(288)           # → 173   (5 × 173 = 865 = 3 × 288 + 1)
 
 **File:** `src/npcryption/cli.py`
 
-Interactive command-line interface.
-
-> **Known issue (v0.1.0):** `cli.py` uses bare imports (`import Encryption`, `import Decryption`) that do not resolve inside the installed package, so importing `npcryption.cli` raises `ModuleNotFoundError: No module named 'Encryption'`. This also breaks the `npcryption` console script. See the [CLI Guide](cli.md#known-issue-in-v010) for a workaround.
->
-> The module also calls `main()` at import time (there is no `if __name__ == "__main__":` guard).
+Interactive command-line interface. Imports `Encryption` and `Decryption` from `npcryption.core`. Importing the module has no side effects; `main()` only runs automatically when the module is executed as a script (`python -m npcryption.cli`).
 
 ---
 
@@ -376,7 +372,7 @@ Thin wrapper around `Decryption.decrypt`. Used by `main()`.
 
 ### `main() → None`
 
-The CLI entry point. Called when the user runs `npcryption` from the terminal (via the `[project.scripts]` entry point in `pyproject.toml`).
+The CLI entry point. Called when the user runs `npcryption` from the terminal (via the `[project.scripts]` entry point in `pyproject.toml`) or `python -m npcryption.cli`.
 
 **Interactive prompts:**
 

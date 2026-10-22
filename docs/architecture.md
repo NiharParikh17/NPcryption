@@ -78,7 +78,7 @@ An interactive command-line script. It:
 3. Accepts the plaintext or ciphertext from standard input.
 4. Calls `encrypt()` or `decrypt()` and prints the result.
 
-> **Note:** `cli.py` currently imports `Encryption` and `Decryption` directly (without the `npcryption.core` prefix). Those names do not resolve in any normal launch — the installed `npcryption` entry point, `python -m npcryption.cli`, and `python src/npcryption/cli.py` all fail with `ModuleNotFoundError: No module named 'Encryption'`. `cli.py` also calls `main()` at module level. See the [CLI Guide](cli.md#known-issue-in-v010) for a workaround; `tests/test_cli.py` uses the same technique.
+It is launched through the `npcryption` console script or `python -m npcryption.cli`; `main()` is guarded by `if __name__ == "__main__":`, so importing the module does not start the prompt.
 
 ### `core/Encryption.py`
 Implements the full string-level RSA encryption routine. Iterates over each character of the plaintext, converts it to its ASCII code, applies modular exponentiation (`M^E mod N`), and zero-pads the result to a fixed block width equal to `len(str(N))`. A cache dictionary (`encyptedDict`) avoids recomputing the same character twice.
