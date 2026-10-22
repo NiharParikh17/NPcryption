@@ -4,106 +4,218 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>NPcryption</title>
-  <meta name="description" content="NPcryption is an educational, pure-Python RSA encryption and decryption library with an interactive CLI.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='6' y='14' width='20' height='14' rx='3' fill='%232f6feb'/%3E%3Cpath d='M11 14v-4a5 5 0 0 1 10 0v4' fill='none' stroke='%232f6feb' stroke-width='3'/%3E%3C/svg%3E">
-  <style>
-    :root {
-      --bg: #f6f8fa;
-      --card: #ffffff;
-      --text: #1f2328;
-      --muted: #59636e;
-      --border: #d1d9e0;
-      --accent: #2f6feb;
-      --code-bg: #eff2f5;
-      --warn-bg: #fff8c5;
-      --warn-border: #d4a72c;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0d1117;
-        --card: #151b23;
-        --text: #e6edf3;
-        --muted: #9198a1;
-        --border: #3d444d;
-        --accent: #4493f8;
-        --code-bg: #212830;
-        --warn-bg: #2e2a14;
-        --warn-border: #9e6a03;
+  <meta name="description" content="Try RSA in your browser: pick two primes, encrypt a message and see every step, computed live by the NPcryption Python library.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='5' y='13' width='22' height='15' rx='4' fill='%232B4EDB'/%3E%3Cpath d='M10 13V9a6 6 0 0 1 12 0v4' fill='none' stroke='%23C42A63' stroke-width='3'/%3E%3C/svg%3E">
+  <script>
+    (function () {
+      var theme;
+      try { theme = localStorage.getItem("npcryption-theme"); } catch (e) {}
+      if (theme !== "light" && theme !== "dark") {
+        theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
       }
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    }
-    main {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 48px 16px;
-    }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 32px;
-    }
-    h1 { margin: 0 0 4px; font-size: 2rem; }
-    h2 { margin: 32px 0 8px; font-size: 1.15rem; }
-    .tagline { margin: 0; color: var(--muted); }
-    .notice {
-      margin: 24px 0 0;
-      padding: 12px 16px;
-      background: var(--warn-bg);
-      border: 1px solid var(--warn-border);
-      border-radius: 8px;
-    }
-    pre {
-      margin: 0 0 12px;
-      padding: 12px 16px;
-      background: var(--code-bg);
-      border-radius: 8px;
-      overflow-x: auto;
-      font: 0.9rem/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    }
-    ul.links { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
-    a { color: var(--accent); }
-    footer { margin-top: 24px; text-align: center; color: var(--muted); font-size: 0.875rem; }
-    @media (max-width: 480px) {
-      main { padding: 24px 16px; }
-      .card { padding: 20px; }
-    }
-  </style>
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Martian+Mono:wght@400..600&display=swap">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="https://cdn.jsdelivr.net/pyodide/v314.0.7/full/pyodide.js"></script>
+  <script defer src="app.js"></script>
 </head>
 <body>
-  <main>
-    <div class="card">
-      <h1>NPcryption</h1>
-      <p class="tagline">An educational, pure-Python RSA encryption and decryption library with an interactive CLI.</p>
+  <a class="skip-link" href="#main">Skip to the demo</a>
 
-      <p class="notice"><strong>Coming soon:</strong> an interactive demo that runs NPcryption in your browser and shows each step of key setup, encryption and decryption.</p>
+  <header class="site-header">
+    <a class="brand" href="./">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <rect x="5" y="13" width="22" height="15" rx="4" class="mark-body"/>
+        <path d="M10 13V9a6 6 0 0 1 12 0v4" class="mark-shackle"/>
+      </svg>
+      NPcryption
+    </a>
+    <nav class="site-nav" aria-label="Project links">
+      <a href="https://github.com/NiharParikh17/NPcryption/tree/main/docs">Docs</a>
+      <a href="https://github.com/NiharParikh17/NPcryption">GitHub</a>
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+      </button>
+    </nav>
+  </header>
 
-      <h2>What it shows</h2>
-      <p>How RSA works under the hood: square-and-multiply modular exponentiation, and deriving the private key with the Extended Euclidean Algorithm. It has no third-party dependencies and is meant for learning, not for protecting real data.</p>
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <h1 id="hero-title">RSA, one letter at&nbsp;a&nbsp;time</h1>
+      <p class="lede">Type a message and watch two prime numbers turn it into ciphertext, then back again. Every number on this page is computed live by the NPcryption Python library, running in your browser.</p>
 
-      <h2>Try it</h2>
-      <pre><code>pip install "git+https://github.com/NiharParikh17/NPcryption.git"</code></pre>
-      <pre><code>&gt;&gt;&gt; from npcryption import encrypt, decrypt
-&gt;&gt;&gt; encrypt(17, 19, 5, "Hello")
-'021271109109042'
-&gt;&gt;&gt; decrypt(17, 19, 5, "021271109109042")
-'Hello'</code></pre>
+      <label class="visually-hidden" for="message">Message to encrypt</label>
+      <input id="message" class="message-input" type="text" value="Hello, RSA!" maxlength="60" autocomplete="off" autocapitalize="off" spellcheck="false" data-message>
+      <p class="hint" id="message-hint">Each character becomes a number block. Tap one to see how it was computed.</p>
 
-      <h2>Links</h2>
-      <ul class="links">
-        <li><a href="https://github.com/NiharParikh17/NPcryption">Source code on GitHub</a></li>
-        <li><a href="https://github.com/NiharParikh17/NPcryption/tree/main/docs">Documentation</a></li>
-        <li><a href="https://github.com/NiharParikh17/NPcryption/releases">Releases</a></li>
-        <li><a href="https://github.com/NiharParikh17/NPcryption/issues/new/choose">Report an issue or suggest a feature</a></li>
-      </ul>
+      <div class="strip" id="hero-strip" aria-label="Your message, character by character"></div>
+
+      <p class="status" id="status" role="status">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span id="status-text">Starting Python in your browser. The first visit downloads about 12&nbsp;MB.</span>
+        <button type="button" class="link-button" id="retry" hidden>Try again</button>
+      </p>
+    </section>
+
+    <div class="layout">
+      <aside class="keyring" aria-label="Current keys">
+        <div class="key key-public">
+          <h2 class="key-title">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+            Public key
+          </h2>
+          <dl class="key-values">
+            <div><dt>N</dt><dd id="ring-n">323</dd></div>
+            <div><dt>E</dt><dd id="ring-e">5</dd></div>
+          </dl>
+          <p class="key-note">Share these. Anyone can use them to encrypt a message for you.</p>
+        </div>
+        <div class="key key-private">
+          <h2 class="key-title">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M21 12v2"/></svg>
+            Private key
+          </h2>
+          <dl class="key-values">
+            <div><dt>D</dt><dd id="ring-d">173</dd></div>
+          </dl>
+          <p class="key-note">Keep D secret, along with P, Q and φ(N). Only D can decrypt.</p>
+        </div>
+      </aside>
+
+      <ol class="steps">
+        <li class="step" id="step-primes" aria-labelledby="step-primes-title">
+          <h2 class="step-title" id="step-primes-title"><span class="step-number" aria-hidden="true">1</span>Choose two secret primes</h2>
+          <p class="step-text">RSA starts with two prime numbers, P and Q. Their product N becomes part of the public key. Everything derived from P and Q stays private.</p>
+
+          <div class="prime-fields">
+            <div class="field">
+              <label for="prime-p">P</label>
+              <div class="stepper">
+                <button type="button" class="step-button" data-prime="p" data-dir="-1" aria-label="Previous prime for P">‹</button>
+                <input id="prime-p" type="number" inputmode="numeric" min="2" max="9973" value="17" aria-describedby="error-p">
+                <button type="button" class="step-button" data-prime="p" data-dir="1" aria-label="Next prime for P">›</button>
+              </div>
+              <p class="field-error" id="error-p" aria-live="polite"></p>
+            </div>
+            <div class="field">
+              <label for="prime-q">Q</label>
+              <div class="stepper">
+                <button type="button" class="step-button" data-prime="q" data-dir="-1" aria-label="Previous prime for Q">‹</button>
+                <input id="prime-q" type="number" inputmode="numeric" min="2" max="9973" value="19" aria-describedby="error-q">
+                <button type="button" class="step-button" data-prime="q" data-dir="1" aria-label="Next prime for Q">›</button>
+              </div>
+              <p class="field-error" id="error-q" aria-live="polite"></p>
+            </div>
+          </div>
+
+          <div class="presets" role="group" aria-label="Example prime pairs">
+            <span class="presets-label">Try</span>
+            <button type="button" class="chip" data-p="11" data-q="13">11 and 13</button>
+            <button type="button" class="chip" data-p="17" data-q="19">17 and 19</button>
+            <button type="button" class="chip" data-p="61" data-q="53">61 and 53</button>
+            <button type="button" class="chip" data-p="5" data-q="11">5 and 11</button>
+          </div>
+
+          <div class="equations" id="prime-equations"></div>
+          <p class="step-note" id="prime-note"></p>
+        </li>
+
+        <li class="step" id="step-exponent" aria-labelledby="step-exponent-title">
+          <h2 class="step-title" id="step-exponent-title"><span class="step-number" aria-hidden="true">2</span>Pick the public exponent</h2>
+          <p class="step-text">E is the other half of the public key. It must share no factor with φ(N), because that's what guarantees a matching private exponent D exists.</p>
+
+          <div class="exponent-picker">
+            <div class="chips" id="exponent-choices" role="group" aria-label="Exponents that work with these primes"></div>
+            <div class="field field-inline">
+              <label for="exponent">E</label>
+              <input id="exponent" type="number" inputmode="numeric" min="3" value="5" aria-describedby="error-e">
+            </div>
+          </div>
+          <p class="field-error" id="error-e" aria-live="polite"></p>
+          <p class="step-note" id="exponent-note" aria-live="polite"></p>
+
+          <div class="panel" id="euclid-panel">
+            <h3 class="panel-title">Finding D with the Extended Euclidean Algorithm</h3>
+            <p class="panel-text">Divide repeatedly, as when finding a greatest common divisor, while tracking how each remainder is built from φ(N) and E. When the remainder reaches 1, the D column holds the inverse of E.</p>
+            <div class="table-wrap">
+              <table class="data-table" id="euclid-table">
+                <caption class="visually-hidden">Extended Euclidean Algorithm rows</caption>
+                <thead><tr><th scope="col">Remainder</th><th scope="col">Quotient</th><th scope="col">X</th><th scope="col">D</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <p class="result-line" id="euclid-result"></p>
+          </div>
+        </li>
+
+        <li class="step" id="step-encrypt" aria-labelledby="step-encrypt-title">
+          <h2 class="step-title" id="step-encrypt-title"><span class="step-number" aria-hidden="true">3</span>Encrypt each character</h2>
+          <p class="step-text">Each character's code M becomes C = M<sup>E</sup> mod N. Instead of multiplying M by itself E times, the library squares repeatedly and multiplies only the rows that match the 1-bits of E.</p>
+
+          <label class="field-label" for="message-step">Message</label>
+          <input id="message-step" class="text-input" type="text" value="Hello, RSA!" maxlength="60" autocomplete="off" autocapitalize="off" spellcheck="false" data-message>
+
+          <div class="char-picker" id="encrypt-picker" role="group" aria-label="Choose a character to inspect"></div>
+          <div class="panel" id="encrypt-detail" aria-live="polite"></div>
+
+          <div class="cipher-output">
+            <div class="cipher-head">
+              <h3 class="panel-title">Ciphertext</h3>
+              <button type="button" class="link-button" id="copy-cipher">Copy</button>
+            </div>
+            <p class="cipher-blocks" id="cipher-blocks"></p>
+          </div>
+        </li>
+
+        <li class="step" id="step-decrypt" aria-labelledby="step-decrypt-title">
+          <h2 class="step-title" id="step-decrypt-title"><span class="step-number" aria-hidden="true">4</span>Decrypt with the private key</h2>
+          <p class="step-text">The ciphertext is cut back into blocks of the same width, and each block C becomes M = C<sup>D</sup> mod N. Only someone who knows D can do this step.</p>
+
+          <div class="cipher-field">
+            <label class="field-label" for="ciphertext">Ciphertext to decrypt</label>
+            <textarea id="ciphertext" class="text-input mono" rows="2" spellcheck="false" aria-describedby="error-cipher"></textarea>
+            <button type="button" class="link-button" id="use-cipher" hidden>Use the ciphertext from step 3</button>
+          </div>
+          <p class="field-error" id="error-cipher" aria-live="polite"></p>
+
+          <div class="char-picker" id="decrypt-picker" role="group" aria-label="Choose a block to inspect"></div>
+          <div class="panel" id="decrypt-detail" aria-live="polite"></div>
+          <p class="plaintext" id="plaintext"></p>
+        </li>
+      </ol>
+
+      <section class="toy" aria-labelledby="toy-title">
+        <h2 id="toy-title">Why this is only a toy</h2>
+        <div class="toy-grid">
+          <div class="toy-item">
+            <h3>Anyone can find your private key</h3>
+            <p id="toy-factor"></p>
+          </div>
+          <div class="toy-item">
+            <h3>Patterns show through</h3>
+            <p id="toy-pattern"></p>
+          </div>
+        </div>
+        <p class="toy-footnote">Real RSA uses primes hundreds of digits long and adds random padding (such as OAEP) before encrypting whole messages, not single characters.</p>
+      </section>
     </div>
-    <footer>MIT License &middot; Educational use only</footer>
   </main>
+
+  <footer class="site-footer">
+    <p>NPcryption is open source under the MIT License and meant for learning, not for protecting real data. Your keys and messages never leave this page.</p>
+    <p class="footer-links">
+      <a href="https://github.com/NiharParikh17/NPcryption">Source code</a>
+      <a href="https://github.com/NiharParikh17/NPcryption/tree/main/docs">Documentation</a>
+      <a href="https://github.com/NiharParikh17/NPcryption/releases">Releases</a>
+      <a href="https://github.com/NiharParikh17/NPcryption/issues/new/choose">Report an issue</a>
+    </p>
+    <p class="footer-meta" id="footer-meta">Runs on Pyodide 314.0.7.</p>
+  </footer>
 </body>
 </html>
