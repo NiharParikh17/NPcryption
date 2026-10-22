@@ -3,16 +3,21 @@ from npcryption.core import Decryption
 
 
 def encrypt(P, Q, E, message):
-    """Encrypting the message by calling encrypt function in Encryption"""
+    """Encrypt `message`; thin wrapper around `Encryption.encrypt`."""
     return Encryption.encrypt(P, Q, E, message)
 
 
 def decrypt(P, Q, E, message):
-    """Decrypting the message by calling decrypt function in Decryption"""
+    """Decrypt `message`; thin wrapper around `Decryption.decrypt`."""
     return Decryption.decrypt(P, Q, E, message)
 
 
 def main():
+    """Run the interactive prompt behind the `npcryption` command.
+
+    Asks for E (encrypt) or D (decrypt), then P, Q, E and the message, and
+    prints the result. Any other choice prints nothing.
+    """
     answer = input("Press E for Encryption or D for Decryption: ")
     P = int(input("Enter Private Key P: "))
     Q = int(input("Enter Private Key Q: "))
