@@ -7,7 +7,8 @@ Encrypts and Decrypts user input using RSA cryptography.
 NPcryption is an educational, pure-Python implementation of RSA with no
 third-party runtime dependencies. It is **not** intended to protect real data.
 
-Website: <https://niharparikh17.github.io/NPcryption/>, with an interactive demo coming soon.
+**Try it in your browser:** <https://niharparikh17.github.io/NPcryption/> is an interactive demo
+that runs this library (via Pyodide) and shows every step of key setup, encryption and decryption.
 
 ## Project Structure
 
@@ -32,7 +33,7 @@ NPcryption/
 │           └── DTable.py
 ├── tests/                   # pytest suite (unit + integration)
 ├── docs/                    # Documentation
-├── web/                     # Project website (GitHub Pages)
+├── web/                     # Interactive demo website (GitHub Pages)
 ├── .gitignore
 ├── LICENSE
 ├── README.md

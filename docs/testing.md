@@ -55,6 +55,7 @@ pytest tests/test_encryption.py
 | `test_dtable.py` | `DTable` initial state, `generateTable()` and `getD()` |
 | `test_cli.py` | Side-effect-free import, `cli.encrypt` / `cli.decrypt` wrappers, `cli.main()` prompts and output, and `python -m npcryption.cli` |
 | `test_integration.py` | End-to-end `encrypt` → `decrypt` round-trips across several key sets, including every printable ASCII character |
+| `test_web_demo.py` | `web/demo.py`, the bridge the website uses: key validation, D and the Euclid rows, per-character tables, decryption errors, and recovering D by factoring N |
 
 The reference key sets used throughout are:
 
@@ -202,6 +203,25 @@ If the automatic run did not happen or failed, re-run it from the Actions tab or
 
 ### `pages.yml` — publishes the website
 
-Runs when a push to `main` changes `web/` or the workflow itself, and on demand. It uploads `web/` as-is and deploys it to GitHub Pages at <https://niharparikh17.github.io/NPcryption/>. The repository's Pages source must be set to **GitHub Actions** (Settings → Pages).
+Runs when a push to `main` changes `web/`, `src/`, `pyproject.toml` or the workflow itself, and on demand. It builds the npcryption wheel from the same commit, copies `web/` and the wheel (as `npcryption.whl`) into `_site/`, and deploys that to GitHub Pages at <https://niharparikh17.github.io/NPcryption/>. The repository's Pages source must be set to **GitHub Actions** (Settings → Pages).
 
-To serve the site from a custom domain such as `npcryption.nhparikh.com`, first add a DNS `CNAME` record pointing to `niharparikh17.github.io`, then enter the domain under Settings → Pages. Doing it in the other order makes the `github.io` address redirect to a domain that does not resolve yet. Keep links in `web/` relative so the site works at both addresses.
+The interactive demo loads [Pyodide](https://pyodide.org/) from jsDelivr, installs `npcryption.whl` into it, and calls the library through `web/demo.py`. `tests/test_web_demo.py` runs `demo.py` under regular Python in CI, so library changes that would break the demo fail the tests.
+
+To preview the site locally:
+
+```bash
+python -m build --wheel
+rm -rf _site && cp -r web _site && cp dist/*.whl _site/npcryption.whl
+python -m http.server --directory _site 8000
+```
+
+then open <http://localhost:8000>. Opening `web/index.html` directly from disk does not work, because the page fetches the wheel.
+
+To serve the site from a custom domain such as `npcryption.nhparikh.com`:
+
+1. Verify `nhparikh.com` under your **profile** Settings → Pages (a DNS `TXT` record). This protects the domain and its immediate subdomains from takeover.
+2. Enter the domain under the **repository's** Settings → Pages → Custom domain.
+3. Add a DNS `CNAME` record for `npcryption` pointing to `niharparikh17.github.io` straight away; until it resolves, the `github.io` address redirects to a domain that does not work yet.
+4. Turn on **Enforce HTTPS** once GitHub has issued the certificate.
+
+GitHub recommends this order (domain in the repository settings before the `CNAME`) so nobody else can claim the subdomain in between. Avoid wildcard DNS records. Keep links in `web/` relative so the site works at both addresses.
