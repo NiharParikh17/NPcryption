@@ -32,8 +32,7 @@ NPcryption uses only the Python **standard library** — there are **zero third-
 
 | Tool | Version constraint | Role |
 |---|---|---|
-| **setuptools** | ≥ 68 | Package building and metadata |
-| **wheel** | latest | Binary distribution format |
+| **setuptools** | ≥ 77 | Package building and metadata (77 is the first release with SPDX `license` strings) |
 | **pyproject.toml** | PEP 517/518 | Single source of truth for project metadata and build config |
 | **setup.cfg** | — | Tool configuration (pytest, flake8) |
 
@@ -41,18 +40,19 @@ NPcryption uses only the Python **standard library** — there are **zero third-
 
 ```toml
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "npcryption"
 version = "0.1.0"
-license = { file = "LICENSE" }
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.10"
 keywords = ["rsa", "cryptography", "encryption", "decryption"]
 ```
 
-> **Note:** Current setuptools releases warn that the `license = { file = ... }` table form and the `License ::` classifier are deprecated in favour of an SPDX string (`license = "MIT"`), with support ending on 2027-02-18. The build still succeeds today.
+The license is declared as an SPDX expression, so there is no `License ::` classifier.
 
 The package version is declared in two places, `pyproject.toml` and `src/npcryption/__init__.py`. The release workflow fails if they differ from the pushed tag.
 
@@ -128,7 +128,6 @@ exclude = .git, __pycache__, .venv, venv, build, dist
 ```
 Development Status :: 3 - Alpha
 Intended Audience :: Developers
-License :: OSI Approved :: MIT License
 Programming Language :: Python :: 3
 Programming Language :: Python :: 3.10
 Programming Language :: Python :: 3.11
